@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "44989899106",
+    "project_id": "repondeur-telephonique",
+    "storage_bucket": "repondeur-telephonique.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44989899106:android:0a7e1b67d1d61eab458c3b",
+        "android_client_info": {
+          "package_name": "com.dam.reptel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44989899106-39ihudpvmba2dcdbrmqvfqq75k7eo7oa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dam.reptel",
+            "certificate_hash": "405acc0dd9e9e65322ad905edb6dd2d115ea55b0"
+          }
+        },
+        {
+          "client_id": "44989899106-bblqpe0ctof3v6k0ns4kn2250fc3tu8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgoTRgLqVbYHiHONjcRupncNlI3XG7Pa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44989899106-bblqpe0ctof3v6k0ns4kn2250fc3tu8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
