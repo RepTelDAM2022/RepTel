@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RepTel</string>
+    <string name="mot_de_passe">Password</string>
+    <string name="num_tel">Phone Number</string>
+    <string name="confirmation_mot_de_passe">Confirm Password</string>
+    <string name="pr_nom_nom">First and Last Name</string>
+    <string name="s_enregistrer">Sign Up</string>
+    <string name="se_connecter">Sign In</string>
+</resources>

@@ -58,7 +58,7 @@
                 app:boxStrokeColor="#000000">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tvPrenomNom"
+                    android:id="@+id/etPrenomNom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/pr_nom_nom"
@@ -75,7 +75,7 @@
                 app:boxStrokeColor="#000000">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tvNumTel"
+                    android:id="@+id/etNumTel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/num_tel"
@@ -94,7 +94,7 @@
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tvMotPass"
+                    android:id="@+id/etMotPass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/mot_de_passe"
@@ -113,7 +113,7 @@
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tvConfMotPass"
+                    android:id="@+id/etConfMotPass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/confirmation_mot_de_passe"
@@ -123,11 +123,12 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnSenregistrer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:onClick="btnSignupClick"
                 android:text="@string/s_enregistrer"
                 android:textColor="@color/button_text_color"
                 android:textStyle="bold" />
