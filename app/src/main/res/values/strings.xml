@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">RepTel</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="num_tel">Num Tel</string>
+    <string name="confirmation_mot_de_passe">Confirmation Mot de Passe</string>
+    <string name="pr_nom_nom">Prénom Nom</string>
+    <string name="s_enregistrer">S\'ENREGISTRER</string>
+    <string name="se_connecter">SE CONNECTER</string>
 </resources>
