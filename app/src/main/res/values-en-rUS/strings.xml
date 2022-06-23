@@ -7,4 +7,6 @@
     <string name="pr_nom_nom">First and Last Name</string>
     <string name="s_enregistrer">Sign Up</string>
     <string name="se_connecter">Sign In</string>
+    <string name="entrez_le_code_otp">Entrez the OTP code</string>
+    <string name="continuer">Continue</string>
 </resources>

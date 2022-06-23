@@ -43,9 +43,6 @@ public class SignupActivity extends AppCompatActivity {
 
     /** ajout de FirebaseAuth pour enregistrer l'utilisateur **/
     private FirebaseAuth firebaseAuth;
-    /** declaration de la BDD et de la collection**/
-    private FirebaseFirestore firestore;
-    private CollectionReference contacts;
 
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
@@ -63,10 +60,6 @@ public class SignupActivity extends AppCompatActivity {
 
         firebaseAuth= FirebaseAuth.getInstance();
         Log.i(TAG, "initUI: instantiation de la firebase");
-        firestore = FirebaseFirestore.getInstance();
-        contacts = firestore.collection("Contacts");
-
-
     }
 
     @Override
@@ -100,42 +93,15 @@ public class SignupActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                // This callback will be invoked in two situations:
-                // 1 - Instant verification. In some cases the phone number can be instantly
-                //     verified without needing to send or enter a verification code.
-                // 2 - Auto-retrieval. On some devices Google Play services can automatically
-                //     detect the incoming verification SMS and perform verification without
-                //     user action.
                 Log.d(TAG, "onVerificationCompleted:" + phoneAuthCredential);
                 Log.i(TAG, "onVerificationCompleted: " + phoneAuthCredential);
 
-//                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, mResendToken.toString());
-//                signInWithPhoneAuthCredential(credential);
+                String verificationId = "";
+                String code = "";
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
+                signInWithPhoneAuthCredential(credential);
 
-                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                updateUI(currentUser);
-
-                Contact contactInfo = new Contact(nom, numTel);
-                contacts.add(contactInfo)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(SignupActivity.this, "Signup de " + numTel + " reussi", Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(SignupActivity.this, "Signup de " + numTel + " echouè", Toast.LENGTH_LONG).show();
-                                Log.d(TAG, "onFailure: " + e.toString());
-                            }
-                        });
-
-                Intent intent1 = new Intent(SignupActivity.this, UnderConstruction.class);
-                startActivity(intent1);
-
-
-
+                Log.i(TAG, "onVerificationCompleted: sIWPAC fait");
             }
 
             @Override
@@ -172,6 +138,8 @@ public class SignupActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(SignupActivity.this, VerificationNumTel.class);
                 intent2.putExtra("verificationID", mVerificationId);
                 intent2.putExtra("Token", mResendToken);
+                intent2.putExtra("nom", nom);
+                intent2.putExtra("numTel", numTel);
                 startActivity(intent2);
 
             }
@@ -212,92 +180,9 @@ public class SignupActivity extends AppCompatActivity {
                             .build();
             PhoneAuthProvider.verifyPhoneNumber(options);
 
-//            String phoneNum = "+16505551111";
-//            String testVerificationCode = "123456";
-//
-//            Log.i(TAG, "btnSignupClick: phone num = " + phoneNum + " code = " + testVerificationCode);
-//
-//// Whenever verification is triggered with the whitelisted number,
-//// provided it is not set for auto-retrieval, onCodeSent will be triggered.
-//           // FirebaseAuth auth = FirebaseAuth.getInstance();
-//            PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
-//                    .setPhoneNumber(phoneNum)
-//                    .setTimeout(60L, TimeUnit.SECONDS)
-//                    .setActivity(this)
-//                    .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//                        @Override
-//                        public void onCodeSent(String verificationId,
-//                                               PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-//                            // Save the verification id somewhere
-//                            // ...
-//                            Log.i(TAG, "onCodeSent: verificationID = " + verificationId + " ");
-//
-//                            // The corresponding whitelisted code above should be used to complete sign-in.
-//                            //this.enableUserManuallyInputCode();
-//                            //
-//                            /** il faut creer le user ici **/
-//                            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, testVerificationCode);
-//
-//                            signInWithPhoneAuthCredential(credential);
-//                        }
-//
-//
-//
-//                        @Override
-//                        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-//                            // Sign in with the credential
-//                            // ...
-//                            //signInWithPhoneAuthCredential(phoneAuthCredential);
-//
-//                        }
-//
-//                        @Override
-//                        public void onVerificationFailed(FirebaseException e) {
-//                            // ...
-//                            if (e instanceof FirebaseAuthInvalidCredentialsException) {
-//                                // Invalid request
-//                                Log.i(TAG, "onVerificationFailed 2 : invalid request");
-//                            } else if (e instanceof FirebaseTooManyRequestsException) {
-//                                // The SMS quota for the project has been exceeded
-//                                Log.i(TAG, "onVerificationFailed 2 : SMS quota for the project has been exceeded");
-//                            }
-//
-//                            // Show a message and update the UI
-//                            Log.i(TAG, "onVerificationFailed 2 : ");
-//
-//                        }
-//
-//                    })
-//
-//                    .build();
-//
-//            PhoneAuthProvider.verifyPhoneNumber(options);
-//
         }
 
     }
-    private void verifyPhoneNumberWithCode(String verificationId, String code) {
-        // [START verify_with_code]
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-        // [END verify_with_code]
-    }
-
-    // [START resend_verification]
-    private void resendVerificationCode(String phoneNumber,
-                                        PhoneAuthProvider.ForceResendingToken token) {
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(firebaseAuth)
-                        .setPhoneNumber(phoneNumber)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // Activity (for callback binding)
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                        .setForceResendingToken(token)     // ForceResendingToken from callbacks
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
-    }
-    // [END resend_verification]
-
-    // [START sign_in_with_phone]
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -318,12 +203,7 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-    // [END sign_in_with_phone]
-
-    private void updateUI(FirebaseUser user) {
-        Log.i(TAG, "updateUI: user name = " + user.getDisplayName() + "\n");
-        Log.i(TAG, "updateUI: user number = " + user.getPhoneNumber());
 
     }
+
 }

@@ -22,7 +22,6 @@ public class UnderConstruction extends AppCompatActivity {
     private CollectionReference contacts;
 
     TextView text;
-    String textDisplay;
 
 
     @Override
