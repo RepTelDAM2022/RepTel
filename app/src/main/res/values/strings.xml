@@ -6,4 +6,6 @@
     <string name="pr_nom_nom">Prénom Nom</string>
     <string name="s_enregistrer">S\'ENREGISTRER</string>
     <string name="se_connecter">SE CONNECTER</string>
+    <string name="entrez_le_code_otp">Entrez le code OTP</string>
+    <string name="continuer">Continuer</string>
 </resources>
