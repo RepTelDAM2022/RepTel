@@ -30,7 +30,7 @@ public class VerificationNumTel extends AppCompatActivity {
 
     /** variables globales **/
 
-    Button boutton = findViewById(R.id.btnContinuer);
+    Button boutton;
     PhoneAuthCredential credential;
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     /** declaration de la BDD et de la collection**/
@@ -42,6 +42,7 @@ public class VerificationNumTel extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification_num_tel);
 
+        boutton=findViewById(R.id.btnContinuer);
         firestore = FirebaseFirestore.getInstance();
         contacts = firestore.collection("Contacts");
 
