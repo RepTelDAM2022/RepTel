@@ -49,22 +49,22 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnSeConnecter"
+        android:id="@+id/btnAnnonce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
         android:backgroundTint="@color/background_tint"
-        android:text="@string/se_connecter"
+        android:text="@string/annonce"
         android:textColor="@color/button_text_color"
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/btnSenregistrer"
+        android:id="@+id/btnMessages"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
         android:backgroundTint="@color/background_tint"
-        android:text="@string/s_enregistrer"
+        android:text="@string/messages"
         android:textColor="@color/button_text_color"
         android:textStyle="bold" />
 

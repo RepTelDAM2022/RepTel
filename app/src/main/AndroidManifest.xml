@@ -3,8 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.dam.reptel">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--Permission for recording audio and storage of audio in users device-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.STORAGE"/>
+
+    <!--Permission de lire les contacts et de repondre au telephone-->
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -17,10 +26,16 @@
         android:theme="@style/Theme.RepTel"
         tools:targetApi="31">
         <activity
-            android:name=".VerificationNumTel"
+            android:name=".MessagingContacts"
             android:exported="false" />
         <activity
-            android:name=".UnderConstruction"
+            android:name=".Annonce"
+            android:exported="false" />
+        <activity
+            android:name=".Parametres"
+            android:exported="false" />
+        <activity
+            android:name=".VerificationNumTel"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

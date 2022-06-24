@@ -9,4 +9,17 @@
     <string name="se_connecter">Sign In</string>
     <string name="entrez_le_code_otp">Entrez the OTP code</string>
     <string name="continuer">Continue</string>
+    <string name="annonce">Welcoming Message</string>
+    <string name="messages">Received Messages</string>
+    <string name="bienvenue_dans_votre">Welcome to your</string>
+    <string name="r_pondeur_t_l_phonique">Personnal</string>
+    <string name="personnel">Answering Machine</string>
+    <string name="message_de_l_annonce">WELCOMING MESSAGE</string>
+    <string name="param_trez_votre">Record your</string>
+    <string name="message_d_acceuil">Welcomming Message</string>
+    <string name="textview">TextView</string>
+    <string name="enregistrer">Enregistrer</string>
+    <string name="ecouter">Ecouter</string>
+    <string name="rec">REC</string>
+    <string name="jouer">PLAY</string>
 </resources>

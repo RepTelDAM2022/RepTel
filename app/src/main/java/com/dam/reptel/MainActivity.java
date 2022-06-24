@@ -1,13 +1,33 @@
 package com.dam.reptel;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    /** permissions **/
+
+    // The request code used in ActivityCompat.requestPermissions()
+    // and returned in the Activity's onRequestPermissionsResult()
+    int PERMISSION_ALL = 1;
+    String[] permissions = {
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.ANSWER_PHONE_CALLS,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
 
     /** Variables globales
      * declaration des deux boutons
@@ -22,12 +42,27 @@ public class MainActivity extends AppCompatActivity {
         btnSeConnecter = findViewById(R.id.btnSeConnecter);
     }
 
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initUI();
+
+        if (!hasPermissions(this, permissions)) {
+            ActivityCompat.requestPermissions(this, permissions, PERMISSION_ALL);
+        }
 
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
             @Override

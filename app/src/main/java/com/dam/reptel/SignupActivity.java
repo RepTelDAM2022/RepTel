@@ -81,11 +81,11 @@ public class SignupActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate: firebase current user " + currentUser);
 
-        if (currentUser != null) {
-            Intent intent1 = new Intent(SignupActivity.this, UnderConstruction.class);
+        //if (currentUser != null) {
+            Intent intent1 = new Intent(SignupActivity.this, Parametres.class);
             startActivity(intent1);
 
-        }
+        //}
 
         // Set OnClickListener pour le boutton s'enregistrer
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
@@ -147,9 +147,19 @@ public class SignupActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
 
-                            Intent intent = new Intent(SignupActivity.this, UnderConstruction.class);
+
+                            /**
+                             *
+                             *
+                             * ici on continue vers les ecrans suivants
+                             *                             *
+                             *
+                             * **/
+
+                            Intent intent = new Intent(SignupActivity.this, Parametres.class);
                             startActivity(intent);
                             finish();
+
                         } else {
                             // Sign in failed, display a message and update the UI
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

@@ -85,8 +85,8 @@ public class VerificationNumTel extends AppCompatActivity {
 
 
 
-                Intent intent3 = new Intent(VerificationNumTel.this, UnderConstruction.class);
-                startActivity(intent3);
+//                Intent intent3 = new Intent(VerificationNumTel.this, UnderConstruction.class);
+//                startActivity(intent3);
 
             }
         });
