@@ -9,8 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,11 +38,20 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnSenregistrer, btnSeConnecter;
 
-    /** Initialisation et lien entre java et le design **/
+    /** Initialisation et lien entre java et le design
+     *
+     * + creation du repertoire RepTel pour y mettre les fichiers sons de l'applications
+     * (annonce + messages.)
+     *
+     * voir le test a faire dans Annonce.java  --> initUI()
+     *
+     *
+     * **/
 
     private void initUI(){
         btnSenregistrer = findViewById(R.id.btnSenregistrer);
         btnSeConnecter = findViewById(R.id.btnSeConnecter);
+
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
@@ -63,6 +75,20 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions(this, permissions)) {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_ALL);
         }
+        /**
+         * + creation du repertoire RepTel pour y mettre les fichiers sons de l'applications
+         * (annonce + messages.)
+         *
+         * voir le test a faire dans Annonce.java  --> initUI()
+         *
+         * **/
+
+        File repTel = new File(Environment.getExternalStorageDirectory() + "/Reptel");
+        if (!repTel.isDirectory()){
+            File repTelDirectory = new File(Environment.getExternalStorageDirectory() + "/RepTel/");
+            repTelDirectory.mkdirs();
+        }
+
 
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
             @Override

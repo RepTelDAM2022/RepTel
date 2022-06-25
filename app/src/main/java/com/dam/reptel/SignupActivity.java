@@ -81,6 +81,16 @@ public class SignupActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate: firebase current user " + currentUser);
 
+        /**
+         * ici test ci le currentUser est null, on s'inscrit sinon on va vers l'ecran suivant.
+         *
+         * ici pour le test, j'ai mis en commentaires ce if donc on va directement vers l'ecran suivant.
+         *
+         * pour faire le marcher le programme, remettre ce if en marche.
+         */
+
+
+
         //if (currentUser != null) {
             Intent intent1 = new Intent(SignupActivity.this, Parametres.class);
             startActivity(intent1);
@@ -152,7 +162,9 @@ public class SignupActivity extends AppCompatActivity {
                              *
                              *
                              * ici on continue vers les ecrans suivants
-                             *                             *
+                             *
+                             * il faudra creer la FireStore Collection et y mettre les infos comme
+                             * le nom et le num de tel
                              *
                              * **/
 

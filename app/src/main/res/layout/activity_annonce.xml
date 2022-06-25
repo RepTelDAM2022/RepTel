@@ -97,6 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:elevation="8dp"
                 android:text="@string/jouer"
                 android:textColor="@color/button_text_color"
                 android:textStyle="bold" />
