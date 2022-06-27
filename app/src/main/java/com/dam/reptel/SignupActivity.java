@@ -86,7 +86,7 @@ public class SignupActivity extends AppCompatActivity {
          *
          * ici pour le test, j'ai mis en commentaires ce if donc on va directement vers l'ecran suivant.
          *
-         * pour faire le marcher le programme, remettre ce if en marche.
+         * pour faire marcher le programme, il faut remettre ce if en marche.
          */
 
 
