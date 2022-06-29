@@ -13,6 +13,9 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnSenregistrer, btnSeConnecter;
 
+    /** ajout de FirebaseAuth pour enregistrer l'utilisateur **/
+    private FirebaseAuth firebaseAuth;
+
     /** Initialisation et lien entre java et le design
      *
      * + creation du repertoire RepTel pour y mettre les fichiers sons de l'applications
@@ -55,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         btnSenregistrer = findViewById(R.id.btnSenregistrer);
         btnSeConnecter = findViewById(R.id.btnSeConnecter);
 
+        firebaseAuth= FirebaseAuth.getInstance();
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
@@ -92,11 +99,22 @@ public class MainActivity extends AppCompatActivity {
             repTelDirectory.mkdirs();
         }
 
+        /**
+         * ici test ci le currentUser est null, on s'inscrit sinon on va vers l'ecran suivant.
+         *
+         */
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            Intent intent1 = new Intent(MainActivity.this, Parametres.class);
+            startActivity(intent1);
+        }
+
+
 
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+                Intent intent = new Intent(MainActivity.this, SignupEmail.class);
                 String titre=btnSenregistrer.getText().toString();
                 intent.putExtra("TitrePage", titre);
                 startActivity(intent);

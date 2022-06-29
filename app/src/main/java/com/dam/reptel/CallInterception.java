@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.session.MediaController;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -18,7 +20,7 @@ public class CallInterception extends BroadcastReceiver {
         tmgr.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 
     }
-    private static class MyPhoneStateListener extends PhoneStateListener {
+    private class MyPhoneStateListener extends PhoneStateListener {
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
@@ -35,6 +37,7 @@ public class CallInterception extends BroadcastReceiver {
                 case TelephonyManager.CALL_STATE_RINGING:
                     // CALL_STATE_RINGING
                     Log.i(TAG, "onCallStateChanged: RINGING " + incomingNumber);
+
                     break;
                 default:
                     break;

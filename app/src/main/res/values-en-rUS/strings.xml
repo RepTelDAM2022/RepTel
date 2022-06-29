@@ -22,4 +22,7 @@
     <string name="ecouter">Ecouter</string>
     <string name="rec">REC</string>
     <string name="jouer">PLAY</string>
+    <string name="email">E-mail</string>
+    <string name="erreurnom">Enter your first and last name</string>
+
 </resources>

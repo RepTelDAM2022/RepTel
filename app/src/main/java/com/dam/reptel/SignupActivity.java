@@ -91,11 +91,11 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-        //if (currentUser != null) {
+        if (currentUser != null) {
             Intent intent1 = new Intent(SignupActivity.this, Parametres.class);
             startActivity(intent1);
 
-        //}
+        }
 
         // Set OnClickListener pour le boutton s'enregistrer
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
