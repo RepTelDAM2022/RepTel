@@ -18,6 +18,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,8 +34,14 @@ public class SignupEmail extends AppCompatActivity {
     private String nom, numTel, motPasse, confMotPass, email;
     private Button btnSenregistrer;
 
-    /** ajout de FirebaseAuth pour enregistrer l'utilisateur **/
+    /** ajout de FirebaseAuth pour enregistrer l'utilisateur
+     * et ajout de la firebase**/
+
     private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore dbc = FirebaseFirestore.getInstance();
+
+    private DocumentReference dbmInfo = dbc.document("");
+
 
     /** initialisation **/
     private void initUI(){
@@ -119,6 +127,11 @@ public class SignupEmail extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
                                     Log.i(TAG, "onSuccess: userId = " + firebaseAuth.getCurrentUser().getUid());
+
+
+
+
+
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
