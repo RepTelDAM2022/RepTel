@@ -32,7 +32,7 @@ public class Parametres extends AppCompatActivity {
         btnMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Parametres.this, MessagingContacts.class);
+                Intent intent = new Intent(Parametres.this, ContactsRecyclerView.class);
                 intent.putExtra("Titre", btnMessages.getText().toString());
                 startActivity(intent);
             }
