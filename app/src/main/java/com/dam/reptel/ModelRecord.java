@@ -6,13 +6,15 @@ public class ModelRecord {
 
     private String numReception;
     private String telAppelant;
+    private String nomAppelant;
     private String lienMessage;
     private Timestamp timeStamp;
     boolean flag;
 
-    public ModelRecord(String numReception, String telAppelant, String lienMessage, Timestamp timeStamp, boolean flag) {
+    public ModelRecord(String numReception, String telAppelant, String nomAppelant, String lienMessage, Timestamp timeStamp, boolean flag) {
         this.numReception = numReception;
         this.telAppelant = telAppelant;
+        this.nomAppelant = nomAppelant;
         this.lienMessage = lienMessage;
         this.timeStamp = timeStamp;
         this.flag = flag;
@@ -59,5 +61,13 @@ public class ModelRecord {
 
     public void setFlag(boolean flag) {
         this.flag = flag;
+    }
+
+    public String getNomAppelant() {
+        return nomAppelant;
+    }
+
+    public void setNomAppelant(String nomAppelant) {
+        this.nomAppelant = nomAppelant;
     }
 }

@@ -11,10 +11,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import static com.dam.reptel.NodesNames.*;
+
+import java.util.Locale;
 
 public class ContactsRecyclerView extends AppCompatActivity {
 
@@ -26,7 +31,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
     private Toolbar toolbar;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
-    private String UserID;
+    private String userID;
 
     /** initialisation **/
     private void init(){
@@ -40,7 +45,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        UserID = firebaseAuth.getCurrentUser().getUid();
+        userID = firebaseAuth.getCurrentUser().getUid();
     }
 
     public class LinearLayoutManagerWrapper extends LinearLayoutManager {
@@ -77,16 +82,45 @@ public class ContactsRecyclerView extends AppCompatActivity {
     }
 
     private void searchContact(String s) {
-        Query query = db.collection()
+        Query query = db.collection(userID);
+        if (!String.valueOf(s).equals("")){
+            query = query
+                    .orderBy("nom_appelant_minuscule")
+                    .startAt(s.toLowerCase())
+                    .endAt(s.toLowerCase() + "\uf8ff");
+        }
+
+        FirestoreRecyclerOptions<ModelRecord> searchContact =
+                new FirestoreRecyclerOptions.Builder<ModelRecord>()
+                        .setQuery(query, ModelRecord.class)
+                        .build();
+
+        adapterContacts = new AdapterContacts(searchContact);
+        rvContacts.setAdapter(adapterContacts);
+        adapterContacts.startListening();
 
     }
 
+    /** recuperer les donnees de la bdd **/
+    private void getDataFromFirestore(){
+        Query query = db.collection(userID).orderBy(KEY_MYNUM);
+
+        FirestoreRecyclerOptions<ModelRecord> contact =
+                new FirestoreRecyclerOptions.Builder<ModelRecord>()
+                        .setQuery(query, ModelRecord.class)
+                        .build();
+
+        adapterContacts = new AdapterContacts(contact);
+        rvContacts.setAdapter(adapterContacts);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_recycler_view);
+
+        init();
+        getDataFromFirestore();
+
     }
-
-
 }
