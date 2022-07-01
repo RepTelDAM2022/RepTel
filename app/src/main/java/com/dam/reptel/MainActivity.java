@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
 
     /** permissions **/
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.ANSWER_PHONE_CALLS,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.READ_PHONE_NUMBERS,
@@ -103,9 +106,18 @@ public class MainActivity extends AppCompatActivity {
          * ici test ci le currentUser est null, on s'inscrit sinon on va vers l'ecran suivant.
          *
          */
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        FirebaseUser currentUser = null;
+        String currentUid = firebaseAuth.getUid();
+        currentUser= firebaseAuth.getCurrentUser(); //TODO : Attention le UserId est conservé en local sur le smartphone; refaire un signOut ou un onDestroy
         if (currentUser != null) {
-            Intent intent1 = new Intent(MainActivity.this, Parametres.class);
+            Log.i(TAG, "onCreate(), current user = " + currentUser);
+            Log.i(TAG, "onCreate(), current user Id = " + currentUid);
+            /** MODIFIE POUR LE TEST A REMETTRE EN MARCHE CETTE LIGNE **/
+            //Intent intent1 = new Intent(MainActivity.this, Parametres.class);
+            /** MODIFIE POUR LE TEST A REMETTRE EN MARCHE CETTE LIGNE **/
+            /** cette ligne mise en marche pour le test il faudra la supprimer apres **/
+            Intent intent1 = new Intent(MainActivity.this, EnregistrementMessages.class);
+            /** cette ligne mise en marche pour le test il faudra la supprimer apres **/
             startActivity(intent1);
         }
 

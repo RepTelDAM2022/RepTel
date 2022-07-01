@@ -1,4 +1,4 @@
-package com.dam.reptel;
+package com.dam.reptel.commons;
 
 import java.sql.Timestamp;
 
@@ -12,6 +12,7 @@ public interface NodesNames {
     String KEY_CALLERSNUM = "Num Tel de l'Appelant";
     String KEY_CALLERSNAME = "Nom de l'Appelant";
     String KEY_MESSAGE = "LienMessage";
+    String KEY_MESSAGE_LOCAL = "LienMessageLocal";
     String KEY_TIMESTAMP = "TimeStamp";
     String KEY_FLAG = "flag";
 

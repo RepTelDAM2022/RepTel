@@ -17,9 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import static com.dam.reptel.NodesNames.*;
-
-import java.util.Locale;
+import static com.dam.reptel.commons.NodesNames.*;
 
 public class ContactsRecyclerView extends AppCompatActivity {
 
