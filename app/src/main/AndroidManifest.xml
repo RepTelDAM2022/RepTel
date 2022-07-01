@@ -34,6 +34,9 @@
             android:theme="@style/FullScreenTheme"
             android:exported="false" />
         <activity
+            android:name=".RecordsActivity"
+            android:exported="false" />
+        <activity
             android:name=".SignupEmail"
             android:exported="false" />
 
