@@ -54,7 +54,7 @@ public class EnregistrementMessages extends AppCompatActivity {
     private static String urlStorageMessage;
 
     public static CollectionReference productsRef = FirebaseFirestore.getInstance().collection(TABLE_USER);
-    public static StorageReference storageRef = FirebaseStorage.getInstance().getReference(MESSAGE_FOLDER);
+    //public static StorageReference storageRef = FirebaseStorage.getInstance().getReference(MESSAGE_FOLDER);
 
 
     /** variables globales**/
@@ -134,6 +134,8 @@ public class EnregistrementMessages extends AppCompatActivity {
 //        Log.i(TAG, "Nom appelant minuscule = " + nomContact.toLowerCase(Locale.ROOT));
 
         Uri messageUri = Uri.fromFile(new File(uriToParse).getAbsoluteFile());
+        //final StorageReference storageRef = FirebaseStorage.getInstance().getReference(MESSAGE_FOLDER);
+        final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child(MESSAGE_FOLDER).child(messageUri.getLastPathSegment());
         Log.i(TAG, "messageUri = " + messageUri);
 
         StorageReference fileReference = storageRef.child("M" + time + ".3gp");

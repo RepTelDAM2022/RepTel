@@ -61,12 +61,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_nomContact"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 </LinearLayout>
