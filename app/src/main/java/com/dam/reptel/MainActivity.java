@@ -112,11 +112,13 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser != null) {
             Log.i(TAG, "onCreate(), current user = " + currentUser);
             Log.i(TAG, "onCreate(), current user Id = " + currentUid);
+
             /** MODIFIE POUR LE TEST A REMETTRE EN MARCHE CETTE LIGNE **/
-            //Intent intent1 = new Intent(MainActivity.this, Parametres.class);
+            Intent intent1 = new Intent(MainActivity.this, Parametres.class);
             /** MODIFIE POUR LE TEST A REMETTRE EN MARCHE CETTE LIGNE **/
+
             /** cette ligne mise en marche pour le test il faudra la supprimer apres **/
-            Intent intent1 = new Intent(MainActivity.this, EnregistrementMessages.class);
+            //Intent intent1 = new Intent(MainActivity.this, EnregistrementMessages.class);
             /** cette ligne mise en marche pour le test il faudra la supprimer apres **/
             startActivity(intent1);
         }

@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaRecorder;
@@ -28,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,6 +44,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.dam.reptel.commons.NodesNames.*;
 
@@ -50,12 +53,10 @@ public class EnregistrementMessages extends AppCompatActivity {
     private static final String TAG = "EnregistrementMessages";
     private static final int REQUEST_AUDIO_PERMISSION_CODE = 1;
 
-    /** la base de donnees et le storage **/
+    /** urlStorageMessage contiendra l'url du message dans la bdd une fois qu'il y sera enregistré **/
     private static String urlStorageMessage;
 
-    public static CollectionReference productsRef = FirebaseFirestore.getInstance().collection(TABLE_USER);
-    //public static StorageReference storageRef = FirebaseStorage.getInstance().getReference(MESSAGE_FOLDER);
-
+    //public static CollectionReference productsRef = FirebaseFirestore.getInstance().collection(TABLE_USER);
 
     /** variables globales**/
 
@@ -63,12 +64,17 @@ public class EnregistrementMessages extends AppCompatActivity {
     private Boolean recording;
     private EditText numAppelant;
     private TextView tv_Contact;
-    private String nomContact;
+    private String nomAppelant;
     private String time;
     private Boolean flagLu;
+    private FirebaseAuth firebaseAuth;
+    private String userId;
+    private String myNumTel;
 
     private MediaRecorder mRecorder;
     private static String mFileName = null;
+
+    private StorageReference storageReference;
 
     private void initUI() {
         btnREC = findViewById(R.id.btnEnrMes);
@@ -76,20 +82,29 @@ public class EnregistrementMessages extends AppCompatActivity {
         tv_Contact = findViewById(R.id.tv_nomContact);
         recording = false;
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE);
-        String time = dateFormat.format(new Date());
-
         File repTel = new File(Environment.getExternalStorageDirectory() + "/Reptel");
         if (!repTel.isDirectory()) {
             File repTelDirectory = new File(Environment.getExternalStorageDirectory() + "/RepTel/");
             repTelDirectory.mkdirs();
         }
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        Log.i(TAG, "initUI: userID = " + userId);
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enregistrement_messages);
+
+        Intent intent = getIntent();
+        myNumTel = intent.getStringExtra("numTel");
+        String titre = intent.getStringExtra("Titre");
+        setTitle(titre);
+
 
         initUI();
 
@@ -102,15 +117,14 @@ public class EnregistrementMessages extends AppCompatActivity {
                     mRecorder = null;
                     btnREC.setText("REC");
                     recording = false;
+                    uploadAudiotoDB();
                     enregistrerDansLaBDD();
                 } else {
                     if (!numAppelant.getText().toString().equals("")) {
-                        //Log.i(TAG, "onClick: num appelant " + numAppelant.getText().toString());
-                        nomContact = getContactNameByPhoneNumber(EnregistrementMessages.this, numAppelant.getText().toString());
-                        tv_Contact.setText(nomContact);
+                        nomAppelant = getContactNameByPhoneNumber(EnregistrementMessages.this, numAppelant.getText().toString());
+                        tv_Contact.setText(nomAppelant);
                         startRecording();
                         btnREC.setText("STOP");
-                        //Log.i(TAG, "onCreate: mFilename apres start recording= " + mFileName);
                     } else {
                         Log.i(TAG, "onClick: num appelant vide");
                     }
@@ -119,11 +133,45 @@ public class EnregistrementMessages extends AppCompatActivity {
         });
     }
 
+    private void uploadAudiotoDB() {
+        String messageFileName = "M" + time + ".3gp";
+        StorageReference filepath = storageReference.child("Messages").child(messageFileName);
+
+        Uri uri = Uri.fromFile(new File(mFileName));
+
+        filepath.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // on demande au storage l'adresse url de stockage
+                        storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                urlStorageMessage = task.getResult().toString();
+                            }
+                        });
+                        Log.i(TAG, "onSuccess: \n"
+                                + "uri = " + uri +"\n"
+                                + "mFilename = " + mFileName +"\n"
+                                + "messageFilename = " + messageFileName + "\n"
+                                + "urlStorageMassege = " + urlStorageMessage);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "onFailure: \n" + e);
+                    }
+                });
+
+    }
+
     private void enregistrerDansLaBDD() {
 
-        String myPhoneNumber = "0621818524"; // TODO recuperer le numero du SignupEmail.java
+        String myPhoneNumber = myNumTel;
         String uriToParse = mFileName;
         flagLu = false;
+        String messageName = "M" + time + ".3gp";
 
 //        Log.i(TAG, "My phone Number = " + myPhoneNumber);
 //        Log.i(TAG, "Num Tel appelant = " + numAppelant.getText().toString());
@@ -133,66 +181,46 @@ public class EnregistrementMessages extends AppCompatActivity {
 //        Log.i(TAG, "Flag = " + flagLu);
 //        Log.i(TAG, "Nom appelant minuscule = " + nomContact.toLowerCase(Locale.ROOT));
 
-        Uri messageUri = Uri.fromFile(new File(uriToParse).getAbsoluteFile());
-        //final StorageReference storageRef = FirebaseStorage.getInstance().getReference(MESSAGE_FOLDER);
-        final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child(MESSAGE_FOLDER).child(messageUri.getLastPathSegment());
-        Log.i(TAG, "messageUri = " + messageUri);
+       CollectionReference productsRef = FirebaseFirestore.getInstance().collection(myPhoneNumber);
+       // on prepare les donnees pour les envoyer dans la bdd
+        Map<String, Object> datas = new HashMap<>();
+        datas.put(KEY_MYNUM, myPhoneNumber);
+        datas.put(KEY_CALLERSNUM, numAppelant.getText().toString());
+        datas.put(KEY_CALLERSNAME, nomAppelant);
+        datas.put(KEY_MESSAGE, urlStorageMessage);
+        datas.put(KEY_MESSAGE_LOCAL, mFileName);
+        datas.put(KEY_TIMESTAMP, time);
+        datas.put(KEY_FLAG, flagLu);
+        if (nomAppelant != null) {
+            datas.put(KEY_CALLERSNAMELOWERCASE, nomAppelant.toLowerCase(Locale.ROOT));
+        } else {
+            datas.put(KEY_CALLERSNAMELOWERCASE, null);
+        };
 
-        StorageReference fileReference = storageRef.child("M" + time + ".3gp");
-        fileReference.putFile(messageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//        Log.i(TAG, "My phone Number = " + myPhoneNumber);
+//        Log.i(TAG, "Num Tel appelant = " + numAppelant.getText().toString());
+//        Log.i(TAG, "Nom Appelant = " + nomAppelant);
+//        Log.i(TAG, "Lien message distant = " + urlStorageMessage);
+//        Log.i(TAG, "Lien message local = " + uriToParse);
+//        Log.i(TAG, "TimeStamp = " + time);
+//        Log.i(TAG, "Flag = " + flagLu);
+//        if (nomAppelant != null)  Log.i(TAG, "Nom appelant minuscule = " + nomAppelant.toLowerCase(Locale.ROOT));
+
+
+        productsRef.add(datas)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // on demande au storage l'adresse URL de stockage
-                       fileReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                           @Override
-                           public void onComplete(@NonNull Task<Uri> task) {
-                               // Quand on récupére l'URL on la transforme en texte pour l'insérer dans Firestore avec les autres données
-                               urlStorageMessage = task.getResult().toString();
-                               // on prepare les donnees pour les envoyer dans la bdd
-                               Map<String, Object> datas = new HashMap<>();
-                               datas.put(KEY_MYNUM, myPhoneNumber);
-                               datas.put(KEY_CALLERSNUM, numAppelant.getText().toString());
-                               datas.put(KEY_CALLERSNAME, nomContact);
-                               datas.put(KEY_MESSAGE, urlStorageMessage);
-                               datas.put(KEY_MESSAGE_LOCAL, mFileName);
-                               datas.put(KEY_TIMESTAMP, time);
-                               datas.put(KEY_FLAG, flagLu);
-
-                               Log.i(TAG, "My phone Number = " + myPhoneNumber);
-                               Log.i(TAG, "Num Tel appelant = " + numAppelant.getText().toString());
-                               Log.i(TAG, "Nom Appelant = " + nomContact);
-                               Log.i(TAG, "Lien message local = " + uriToParse);
-                               Log.i(TAG, "TimeStamp = " + time);
-                               Log.i(TAG, "Flag = " + flagLu);
-                               Log.i(TAG, "Nom appelant minuscule = " + nomContact.toLowerCase(Locale.ROOT));
-
-
-                               productsRef.add(datas)
-                                       .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                           @Override
-                                           public void onSuccess(DocumentReference documentReference) {
-                                               Log.i(TAG, "onSuccess: DocumentSnapshot added with ID = " + documentReference.getId());
-                                           }
-                                       })
-                                       .addOnFailureListener(new OnFailureListener() {
-                                           @Override
-                                           public void onFailure(@NonNull Exception e) {
-                                               Log.i(TAG, "onFailure: error adding document to db " + e);
-                                           }
-                                       });
-                           }
-                       });
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.i(TAG, "onSuccess: DocumentSnapshot added with ID = " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "onFailure: on n'a pas enregistré");
+                        Log.i(TAG, "onFailure: error adding document to db " + e);
                     }
                 });
     }
-
 
     private void startRecording() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE);
@@ -218,6 +246,7 @@ public class EnregistrementMessages extends AppCompatActivity {
             RequestPermissions();
         }
     }
+
     public boolean CheckPermissions() {
         int result = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int result1 = ContextCompat.checkSelfPermission(getApplicationContext(), RECORD_AUDIO);

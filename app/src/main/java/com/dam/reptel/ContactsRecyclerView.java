@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.Query;
 import static com.dam.reptel.commons.NodesNames.*;
 
 public class ContactsRecyclerView extends AppCompatActivity {
+    private static final String TAG = "ContactsRecyclerView";
 
     /** var globales **/
     private Context context;
@@ -36,9 +38,10 @@ public class ContactsRecyclerView extends AppCompatActivity {
         rvContacts = findViewById(R.id.rvContacts);
         rvContacts.setHasFixedSize(true);   /** ?????? faut-il mettre ca???? la taille de la bdd peut changer a tout moment **/
         rvContacts.setLayoutManager(new LinearLayoutManagerWrapper(context, LinearLayoutManager.VERTICAL, false));
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Log.i(TAG, "init: avant declaration toolbar");
+//        toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        Log.i(TAG, "init: apres declaration toolbar");
 
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

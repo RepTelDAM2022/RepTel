@@ -127,11 +127,6 @@ public class SignupEmail extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
                                     Log.i(TAG, "onSuccess: userId = " + firebaseAuth.getCurrentUser().getUid());
-
-
-
-
-
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -153,6 +148,7 @@ public class SignupEmail extends AppCompatActivity {
                      * **/
 
                     Intent intent = new Intent(SignupEmail.this, Parametres.class);
+                    intent.putExtra("numTel", numTel);
                     startActivity(intent);
                 }
             }

@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class Parametres extends AppCompatActivity {
 
-    private Button btnAnnonce, btnMessages;
+    private Button btnAnnonce, btnMessages, btnSimuler;
 
 
     @Override
@@ -19,6 +19,11 @@ public class Parametres extends AppCompatActivity {
 
         btnAnnonce = findViewById(R.id.btnAnnonce);
         btnMessages = findViewById(R.id.btnMessages);
+        btnSimuler = findViewById(R.id.btn_simuler);
+
+        Intent intent = getIntent();
+        String numTel = intent.getStringExtra("numTel");
+
 
         btnAnnonce.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +39,16 @@ public class Parametres extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Parametres.this, ContactsRecyclerView.class);
                 intent.putExtra("Titre", btnMessages.getText().toString());
+                startActivity(intent);
+            }
+        });
+
+        btnSimuler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Parametres.this, EnregistrementMessages.class);
+                intent.putExtra("Titre", btnSimuler.getText().toString());
+                intent.putExtra("numTel", numTel);
                 startActivity(intent);
             }
         });
