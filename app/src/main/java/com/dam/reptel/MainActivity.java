@@ -26,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
 
-    /**
-     * permissions
-     **/
+    /** permissions **/
 
     // The request code used in ActivityCompat.requestPermissions()
     // and returned in the Activity's onRequestPermissionsResult()
@@ -46,31 +44,42 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_CALL_LOG,
     };
 
-    /**
-     * Variables globales
+    /** Variables globales
      * declaration des deux boutons
      * **/
     Button btnSenregistrer, btnSeConnecter;
 
-    /**
-     * ajout de FirebaseAuth pour enregistrer l'utilisateur
-     **/
+    private Context context; //Pas utilisé, mais on le met pour ne pas cracher l'application
+    private RecyclerView rvRecords;
+    private AdapterRecords adapterRecords;
+    private FirebaseFirestore db;
+
+
+    /** ajout de FirebaseAuth pour enregistrer l'utilisateur **/
     private FirebaseAuth firebaseAuth;
 
-    /**
-     * Initialisation et lien entre java et le design
-     * <p>
+    /** Initialisation et lien entre java et le design
+     *
      * + creation du repertoire RepTel pour y mettre les fichiers sons de l'applications
      * (annonce + messages.)
-     * <p>
+     *
      * voir le test a faire dans Annonce.java  --> initUI()
-     **/
+     *
+     *
+     * **/
 
-    private void initUI() {
+    private void initUI(){
         btnSenregistrer = findViewById(R.id.btnSenregistrer);
         btnSeConnecter = findViewById(R.id.btnSeConnecter);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        rvRecords = findViewById(R.id.rvRecords);
+        rvRecords.setHasFixedSize(true); //Réservation en mémoire d'une taille fixe pour optimiser
+        rvRecords.setLayoutManager(new LinearLayoutManager(context, //On le met pour ne pas cracher l'application
+                LinearLayoutManager.VERTICAL,
+                false)); //A à Z
+
+        firebaseAuth= FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
@@ -103,13 +112,9 @@ public class MainActivity extends AppCompatActivity {
          * **/
 
         File repTel = new File(Environment.getExternalStorageDirectory() + "/Reptel");
-        Log.i(TAG, "onCreate: " + repTel);
-        if (!repTel.isDirectory()) {
-            Log.i(TAG, "onCreate: reptel no exist");
+        if (!repTel.isDirectory()){
             File repTelDirectory = new File(Environment.getExternalStorageDirectory() + "/RepTel/");
             repTelDirectory.mkdirs();
-        } else {
-            Log.i(TAG, "onCreate: reptel exist");
         }
 
         /**
@@ -118,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
          */
         FirebaseUser currentUser = null;
         String currentUid = firebaseAuth.getUid();
-        currentUser = firebaseAuth.getCurrentUser(); //TODO : Attention le UserId est conservé en local sur le smartphone; refaire un signOut ou un onDestroy
+        currentUser= firebaseAuth.getCurrentUser(); //TODO : Attention le UserId est conservé en local sur le smartphone; refaire un signUp ou un onDestroy
         if (currentUser != null) {
             Log.i(TAG, "onCreate(), current user = " + currentUser);
             Log.i(TAG, "onCreate(), current user Id = " + currentUid);
@@ -134,11 +139,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SignupEmail.class);
-                String titre = btnSenregistrer.getText().toString();
+                String titre=btnSenregistrer.getText().toString();
                 intent.putExtra("TitrePage", titre);
                 startActivity(intent);
             }
@@ -148,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                String titre = btnSeConnecter.getText().toString();
+                String titre=btnSeConnecter.getText().toString();
                 intent.putExtra("TitrePage", titre);
                 startActivity(intent);
             }
