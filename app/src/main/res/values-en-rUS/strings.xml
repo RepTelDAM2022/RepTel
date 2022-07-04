@@ -18,11 +18,11 @@
     <string name="param_trez_votre">Record your</string>
     <string name="message_d_acceuil">Welcome Message</string>
     <string name="textview">TextView</string>
-    <string name="enregistrer">Enregistrer</string>
-    <string name="ecouter">Ecouter</string>
+    <string name="enregistrer">Record</string>
+    <string name="ecouter">Listen</string>
     <string name="rec">REC</string>
     <string name="jouer">PLAY</string>
     <string name="email">E-mail</string>
     <string name="erreurnom">Enter your first and last name</string>
-
+    <string name="search">Search</string>
 </resources>
