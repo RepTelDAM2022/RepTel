@@ -3,6 +3,8 @@ package com.dam.reptel;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
@@ -16,6 +18,7 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 
@@ -46,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Variables globales
      * declaration des deux boutons
-     **/
-
+     * **/
     Button btnSenregistrer, btnSeConnecter;
 
     /**
