@@ -23,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
 
-    /** permissions **/
+    /**
+     * permissions
+     **/
 
     // The request code used in ActivityCompat.requestPermissions()
     // and returned in the Activity's onRequestPermissionsResult()
@@ -41,30 +43,32 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_CALL_LOG,
     };
 
-    /** Variables globales
+    /**
+     * Variables globales
      * declaration des deux boutons
-     * **/
+     **/
 
     Button btnSenregistrer, btnSeConnecter;
 
-    /** ajout de FirebaseAuth pour enregistrer l'utilisateur **/
+    /**
+     * ajout de FirebaseAuth pour enregistrer l'utilisateur
+     **/
     private FirebaseAuth firebaseAuth;
 
-    /** Initialisation et lien entre java et le design
-     *
+    /**
+     * Initialisation et lien entre java et le design
+     * <p>
      * + creation du repertoire RepTel pour y mettre les fichiers sons de l'applications
      * (annonce + messages.)
-     *
+     * <p>
      * voir le test a faire dans Annonce.java  --> initUI()
-     *
-     *
-     * **/
+     **/
 
-    private void initUI(){
+    private void initUI() {
         btnSenregistrer = findViewById(R.id.btnSenregistrer);
         btnSeConnecter = findViewById(R.id.btnSeConnecter);
 
-        firebaseAuth= FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
@@ -97,9 +101,13 @@ public class MainActivity extends AppCompatActivity {
          * **/
 
         File repTel = new File(Environment.getExternalStorageDirectory() + "/Reptel");
-        if (!repTel.isDirectory()){
+        Log.i(TAG, "onCreate: " + repTel);
+        if (!repTel.isDirectory()) {
+            Log.i(TAG, "onCreate: reptel no exist");
             File repTelDirectory = new File(Environment.getExternalStorageDirectory() + "/RepTel/");
             repTelDirectory.mkdirs();
+        } else {
+            Log.i(TAG, "onCreate: reptel exist");
         }
 
         /**
@@ -108,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
          */
         FirebaseUser currentUser = null;
         String currentUid = firebaseAuth.getUid();
-        currentUser= firebaseAuth.getCurrentUser(); //TODO : Attention le UserId est conservé en local sur le smartphone; refaire un signOut ou un onDestroy
+        currentUser = firebaseAuth.getCurrentUser(); //TODO : Attention le UserId est conservé en local sur le smartphone; refaire un signOut ou un onDestroy
         if (currentUser != null) {
             Log.i(TAG, "onCreate(), current user = " + currentUser);
             Log.i(TAG, "onCreate(), current user Id = " + currentUid);
@@ -124,12 +132,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SignupEmail.class);
-                String titre=btnSenregistrer.getText().toString();
+                String titre = btnSenregistrer.getText().toString();
                 intent.putExtra("TitrePage", titre);
                 startActivity(intent);
             }
@@ -139,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                String titre=btnSeConnecter.getText().toString();
+                String titre = btnSeConnecter.getText().toString();
                 intent.putExtra("TitrePage", titre);
                 startActivity(intent);
             }

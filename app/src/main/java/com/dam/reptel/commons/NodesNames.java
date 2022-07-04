@@ -8,10 +8,10 @@ public interface NodesNames {
     String TABLE_USER = "UserID";
 
     // les clés pour les champs de la db
-    String KEY_MYNUM = "Registered User Phone Number";
-    String KEY_CALLERSNUM = "Num Tel de l'Appelant";
-    String KEY_CALLERSNAME = "Nom de l'Appelant";
-    String KEY_CALLERSNAMELOWERCASE = "Nom de l'Appelant Minuscule";
+    String KEY_MYNUM = "RegisteredUserPhoneNumber";
+    String KEY_CALLERSNUM = "NumTeldelAppelant";
+    String KEY_CALLERSNAME = "NomdelAppelant";
+    String KEY_CALLERSNAMELOWERCASE = "NomdelAppelantMinuscule";
     String KEY_MESSAGE = "LienMessageDistant";
     String KEY_MESSAGE_LOCAL = "LienMessageLocal";
     String KEY_TIMESTAMP = "TimeStamp";

@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -47,6 +48,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.dam.reptel.commons.NodesNames.*;
+import static java.lang.System.currentTimeMillis;
 
 public class EnregistrementMessages extends AppCompatActivity {
 
@@ -181,7 +183,7 @@ public class EnregistrementMessages extends AppCompatActivity {
 //        Log.i(TAG, "Flag = " + flagLu);
 //        Log.i(TAG, "Nom appelant minuscule = " + nomContact.toLowerCase(Locale.ROOT));
 
-       CollectionReference productsRef = FirebaseFirestore.getInstance().collection(myPhoneNumber);
+       CollectionReference productsRef = FirebaseFirestore.getInstance().collection(userId);
        // on prepare les donnees pour les envoyer dans la bdd
         Map<String, Object> datas = new HashMap<>();
         datas.put(KEY_MYNUM, myPhoneNumber);
@@ -224,7 +226,7 @@ public class EnregistrementMessages extends AppCompatActivity {
 
     private void startRecording() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE);
-        time =  dateFormat.format(new Date()) ;
+        time = dateFormat.format(new Date());
 
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/RepTel/M" + time + ".3gp";
