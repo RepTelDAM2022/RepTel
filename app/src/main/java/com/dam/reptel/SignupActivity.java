@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseException;
@@ -25,9 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
 
@@ -52,7 +47,7 @@ public class SignupActivity extends AppCompatActivity {
     /** initialisation **/
     private void initUI(){
         etPrenomNom = findViewById(R.id.etPrenomNom);
-        etNumTel = findViewById(R.id.etNumTel);
+        etNumTel = findViewById(R.id.et_email);
         etMotPass = findViewById(R.id.etMotPass);
         etConfMotPass = findViewById(R.id.etConfMotPass);
         etOTP = findViewById(R.id.etOTP);

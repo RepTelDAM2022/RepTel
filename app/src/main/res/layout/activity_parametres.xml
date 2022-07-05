@@ -77,4 +77,13 @@
         android:textColor="@color/button_text_color"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/btn_signout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Signout"
+        android:textColor="@color/button_text_color"
+        android:textStyle="bold" />
+
 </LinearLayout>

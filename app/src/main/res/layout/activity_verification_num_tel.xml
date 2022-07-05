@@ -59,7 +59,7 @@
                 app:boxStrokeColor="#000000">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etNumTel"
+                    android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/entrez_le_code_otp"

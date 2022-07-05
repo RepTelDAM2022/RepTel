@@ -21,9 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class SignupEmail extends AppCompatActivity {
 
     private static final String TAG = "SignupEmail";
@@ -46,7 +43,7 @@ public class SignupEmail extends AppCompatActivity {
     /** initialisation **/
     private void initUI(){
         etPrenomNom = findViewById(R.id.etPrenomNom);
-        etNumTel = findViewById(R.id.etNumTel);
+        etNumTel = findViewById(R.id.et_email);
         etEmail= findViewById(R.id.etEmail);
         etMotPass = findViewById(R.id.etMotPass);
         etConfMotPass = findViewById(R.id.etConfMotPass);
