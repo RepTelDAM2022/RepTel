@@ -52,6 +52,7 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
 
         contactsViewHolder.tv_nomcontact.setText(nom);
         contactsViewHolder.tv_telcontact.setText(tel);
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date resultdate = new Date(timestamp);
         String newDate = sdf.format(resultdate);
