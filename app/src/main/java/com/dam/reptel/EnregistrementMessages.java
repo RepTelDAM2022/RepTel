@@ -67,7 +67,7 @@ public class EnregistrementMessages extends AppCompatActivity {
     private EditText numAppelant;
     private TextView tv_Contact;
     private String nomAppelant;
-    private String time;
+    private long time;
     private Boolean flagLu;
     private FirebaseAuth firebaseAuth;
     private String userId;
@@ -225,8 +225,10 @@ public class EnregistrementMessages extends AppCompatActivity {
     }
 
     private void startRecording() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE);
-        time = dateFormat.format(new Date());
+
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE);
+//        time = dateFormat.format(new Date());
+        time = System.currentTimeMillis();
 
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/RepTel/M" + time + ".3gp";
