@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +28,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, AdapterContacts.ContactsViewHolder> {
+    private static final String TAG = "AdapterContacts";
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -42,14 +46,24 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
 
     @Override
     protected void onBindViewHolder(@NonNull AdapterContacts.ContactsViewHolder contactsViewHolder, int position, @NonNull ModelRecord model) {
+        Log.i(TAG, "onBindViewHolder: model.getTimeStamp = " + model.getTimeStamp());
         String nom = model.getNomdelAppelant();
         String tel = model.getNumTeldelAppelant();
-        String timestamp = model.getTimeStamp();
+
+        long timestamp = model.getTimeStamp();
+        Log.i(TAG, "onBindViewHolder: timestamp = " + timestamp + "model.getTimeStamp = " + model.getTimeStamp());
+
         Bitmap photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
 
         contactsViewHolder.tv_nomcontact.setText(nom);
         contactsViewHolder.tv_telcontact.setText(tel);
-        contactsViewHolder.tv_timestamp.setText((CharSequence) timestamp);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Date resultDate = new Date(timestamp);
+        String newDate = sdf.format(resultDate);
+        Log.i(TAG, "onBindViewHolder: newDate = " + newDate);
+
+        contactsViewHolder.tv_timestamp.setText(newDate);
 
         // recherche de la photo du contact dans les contacts a partir du numero de tel
         // photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);

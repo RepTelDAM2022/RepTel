@@ -12,13 +12,13 @@ public class ModelRecord {
     private String NomdelAppelantMinuscule;
     private String LienMessageDistant;
     private String LienMessageLocal;
-    private String TimeStamp;
+    private long TimeStamp;
     boolean flag;
 
     public ModelRecord() {
     }
 
-    public ModelRecord(String registeredUserPhoneNumber, String numTeldelAppelant, String nomdelAppelant, String nomdelAppelantMinuscule, String lienMessageDistant, String lienMessageLocal, String timeStamp, boolean flag) {
+    public ModelRecord(String registeredUserPhoneNumber, String numTeldelAppelant, String nomdelAppelant, String nomdelAppelantMinuscule, String lienMessageDistant, String lienMessageLocal, long timeStamp, boolean flag) {
         RegisteredUserPhoneNumber = registeredUserPhoneNumber;
         NumTeldelAppelant = numTeldelAppelant;
         NomdelAppelant = nomdelAppelant;
@@ -77,11 +77,11 @@ public class ModelRecord {
         LienMessageLocal = lienMessageLocal;
     }
 
-    public String getTimeStamp() {
+    public long getTimeStamp() {
         return TimeStamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(long timeStamp) {
         TimeStamp = timeStamp;
     }
 

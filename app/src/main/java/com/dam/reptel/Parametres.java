@@ -49,6 +49,7 @@ public class Parametres extends AppCompatActivity {
                 Intent intent = new Intent(Parametres.this, ContactsRecyclerView.class);
                 intent.putExtra("Titre", btnMessages.getText().toString());
                 intent.putExtra("ColKeyPhoneNumber", numTel);
+                //intent.putExtra("ColKeyPhoneNumber", "0777392997");
                 Log.i(TAG, "onClick: numTel = " + numTel);
                 startActivity(intent);
             }

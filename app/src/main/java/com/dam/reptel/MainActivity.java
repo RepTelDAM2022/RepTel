@@ -49,11 +49,6 @@ public class MainActivity extends AppCompatActivity {
      * **/
     Button btnSenregistrer, btnSeConnecter;
 
-    private Context context; //Pas utilisé, mais on le met pour ne pas cracher l'application
-    private RecyclerView rvRecords;
-    private AdapterRecords adapterRecords;
-    private FirebaseFirestore db;
-
 
     /** ajout de FirebaseAuth pour enregistrer l'utilisateur **/
     private FirebaseAuth firebaseAuth;
@@ -71,16 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private void initUI(){
         btnSenregistrer = findViewById(R.id.btnSenregistrer);
         btnSeConnecter = findViewById(R.id.btnSeConnecter);
-
-        rvRecords = findViewById(R.id.rvRecords);
-        rvRecords.setHasFixedSize(true); //Réservation en mémoire d'une taille fixe pour optimiser
-        rvRecords.setLayoutManager(new LinearLayoutManager(context, //On le met pour ne pas cracher l'application
-                LinearLayoutManager.VERTICAL,
-                false)); //A à Z
-
         firebaseAuth= FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-    }
+     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {

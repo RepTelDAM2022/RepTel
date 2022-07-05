@@ -108,10 +108,10 @@ public class ContactsRecyclerView extends AppCompatActivity {
 
     /** recuperer les donnees de la bdd **/
     private void getDataFromFirestore(){
-        Log.i(TAG, "getDataFromFirestore: userID = " + userID);
-        Log.i(TAG, "getDataFromFirestore: KEY_MYNUM = " + KEY_MYNUM);
-        Query query = db.collection(userID).orderBy(KEY_MYNUM);
-        Log.i(TAG, "getDataFromFirestore: " + query);
+        Log.i(TAG, "getDataFromFirestore: avant la query userID = " + userID);
+
+        Query query = db.collection(userID).orderBy(KEY_TIMESTAMP);
+
         FirestoreRecyclerOptions<ModelRecord> record =
                 new FirestoreRecyclerOptions.Builder<ModelRecord>()
                         .setQuery(query, ModelRecord.class)
@@ -145,6 +145,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
         if(curentUser == null){
             startActivity(new Intent(ContactsRecyclerView.this, SignupEmail.class));
         } else {
+            Log.i(TAG, "onStart: start listening");
             adapterContacts.startListening();
         }
     }
