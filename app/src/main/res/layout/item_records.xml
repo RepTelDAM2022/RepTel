@@ -26,17 +26,6 @@
             tools:text="Enreg. name" />
 
         <TextView
-            android:id="@+id/tvRecordDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:text="TextView"
-            android:textColor="@color/white"
-            tools:text="Duration" />
-
-        <TextView
             android:id="@+id/tvRecordDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,6 +35,17 @@
             android:text="TextView"
             android:textColor="@color/white"
             tools:text="Date enreg." />
+
+        <TextView
+            android:id="@+id/tvRecordDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:textColor="@color/white"
+            tools:text="Duration" />
 
         <ImageView
             android:id="@+id/ivPlay"
