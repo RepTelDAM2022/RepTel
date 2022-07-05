@@ -46,14 +46,17 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
 
     @Override
     protected void onBindViewHolder(@NonNull AdapterContacts.ContactsViewHolder contactsViewHolder, int position, @NonNull ModelRecord model) {
-        Log.i(TAG, "onBindViewHolder: model.getTimeStamp = " + model.getTimeStamp());
+
+        /** ici on recupere les donnees du model rempli par la query **/
         String nom = model.getNomdelAppelant();
         String tel = model.getNumTeldelAppelant();
 
         long timestamp = model.getTimeStamp();
-        Log.i(TAG, "onBindViewHolder: timestamp = " + timestamp + "model.getTimeStamp = " + model.getTimeStamp());
 
         Bitmap photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
+
+        /** ici on rempli les donnees dans le RV **/
+
 
         contactsViewHolder.tv_nomcontact.setText(nom);
         contactsViewHolder.tv_telcontact.setText(tel);
@@ -61,7 +64,6 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date resultDate = new Date(timestamp);
         String newDate = sdf.format(resultDate);
-        Log.i(TAG, "onBindViewHolder: newDate = " + newDate);
 
         contactsViewHolder.tv_timestamp.setText(newDate);
 
@@ -71,6 +73,7 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
         // ajout des options pour afficher les photos des contacts.
         RequestOptions options = new RequestOptions()
                 .centerCrop()
+                .circleCrop()
                 .error(R.drawable.ic_contacts_24)
                 .placeholder(R.drawable.ic_contacts_24);
 
