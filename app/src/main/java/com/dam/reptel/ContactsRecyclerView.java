@@ -42,7 +42,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
 //        rvContacts.setLayoutManager(new LinearLayoutManagerWrapper(this, LinearLayoutManager.VERTICAL, false));
         rvContacts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-//        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -108,10 +108,12 @@ public class ContactsRecyclerView extends AppCompatActivity {
 
     /** recuperer les donnees de la bdd **/
     private void getDataFromFirestore(){
-        Log.i(TAG, "getDataFromFirestore: userID = " + userID);
-        Log.i(TAG, "getDataFromFirestore: KEY_MYNUM = " + KEY_MYNUM);
-        Query query = db.collection(userID).orderBy(KEY_MYNUM);
-        Log.i(TAG, "getDataFromFirestore: " + query);
+
+//        Query query = db.collection(userID).orderBy(KEY_MYNUM);
+        Query query = db.collection(userID)
+                .orderBy(KEY_TIMESTAMP, Query.Direction.DESCENDING)
+                .whereEqualTo("flag", false);
+
         FirestoreRecyclerOptions<ModelRecord> record =
                 new FirestoreRecyclerOptions.Builder<ModelRecord>()
                         .setQuery(query, ModelRecord.class)
