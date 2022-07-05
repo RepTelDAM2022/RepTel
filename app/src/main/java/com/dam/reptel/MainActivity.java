@@ -3,8 +3,6 @@ package com.dam.reptel;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
@@ -18,7 +16,6 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 
@@ -47,13 +44,8 @@ public class MainActivity extends AppCompatActivity {
     /** Variables globales
      * declaration des deux boutons
      * **/
+
     Button btnSenregistrer, btnSeConnecter;
-
-    private Context context; //Pas utilisé, mais on le met pour ne pas cracher l'application
-    private RecyclerView rvRecords;
-    private AdapterRecords adapterRecords;
-    private FirebaseFirestore db;
-
 
     /** ajout de FirebaseAuth pour enregistrer l'utilisateur **/
     private FirebaseAuth firebaseAuth;
@@ -72,14 +64,7 @@ public class MainActivity extends AppCompatActivity {
         btnSenregistrer = findViewById(R.id.btnSenregistrer);
         btnSeConnecter = findViewById(R.id.btnSeConnecter);
 
-        rvRecords = findViewById(R.id.rvRecords);
-        rvRecords.setHasFixedSize(true); //Réservation en mémoire d'une taille fixe pour optimiser
-        rvRecords.setLayoutManager(new LinearLayoutManager(context, //On le met pour ne pas cracher l'application
-                LinearLayoutManager.VERTICAL,
-                false)); //A à Z
-
         firebaseAuth= FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
@@ -123,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
          */
         FirebaseUser currentUser = null;
         String currentUid = firebaseAuth.getUid();
-        currentUser= firebaseAuth.getCurrentUser(); //TODO : Attention le UserId est conservé en local sur le smartphone; refaire un signUp ou un onDestroy
+        currentUser= firebaseAuth.getCurrentUser(); //TODO : Attention le UserId est conservé en local sur le smartphone; refaire un signOut ou un onDestroy
         if (currentUser != null) {
             Log.i(TAG, "onCreate(), current user = " + currentUser);
             Log.i(TAG, "onCreate(), current user Id = " + currentUid);
