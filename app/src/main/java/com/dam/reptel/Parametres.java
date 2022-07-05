@@ -4,17 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 public class Parametres extends AppCompatActivity {
-    private static final String TAG = "Parametres";
 
-    private Button btnAnnonce, btnMessages, btnSimuler, btnSignout;
-    String numTel;
+    private Button btnAnnonce, btnMessages, btnSimuler;
 
 
     @Override
@@ -25,13 +20,9 @@ public class Parametres extends AppCompatActivity {
         btnAnnonce = findViewById(R.id.btnAnnonce);
         btnMessages = findViewById(R.id.btnMessages);
         btnSimuler = findViewById(R.id.btn_simuler);
-        btnSignout = findViewById(R.id.btn_signout);
 
         Intent intent = getIntent();
-        numTel = intent.getStringExtra("numTel");
-        Log.i(TAG, "onCreate: numTel = " + numTel);
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String numTel = intent.getStringExtra("numTel");
 
 
         btnAnnonce.setOnClickListener(new View.OnClickListener() {
@@ -48,8 +39,6 @@ public class Parametres extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Parametres.this, ContactsRecyclerView.class);
                 intent.putExtra("Titre", btnMessages.getText().toString());
-                intent.putExtra("ColKeyPhoneNumber", numTel);
-                Log.i(TAG, "onClick: numTel = " + numTel);
                 startActivity(intent);
             }
         });
@@ -63,16 +52,5 @@ public class Parametres extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        btnSignout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseAuth.signOut();
-                Intent intent = new Intent(Parametres.this, MainActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
     }
 }

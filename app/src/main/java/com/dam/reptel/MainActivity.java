@@ -26,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
 
-    /**
-     * permissions
-     **/
+    /** permissions **/
 
     // The request code used in ActivityCompat.requestPermissions()
     // and returned in the Activity's onRequestPermissionsResult()
@@ -46,31 +44,30 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_CALL_LOG,
     };
 
-    /**
-     * Variables globales
+    /** Variables globales
      * declaration des deux boutons
-     * **/
+     **/
+
     Button btnSenregistrer, btnSeConnecter;
 
-    /**
-     * ajout de FirebaseAuth pour enregistrer l'utilisateur
-     **/
+    /** ajout de FirebaseAuth pour enregistrer l'utilisateur **/
     private FirebaseAuth firebaseAuth;
 
-    /**
-     * Initialisation et lien entre java et le design
-     * <p>
+    /** Initialisation et lien entre java et le design
+     *
      * + creation du repertoire RepTel pour y mettre les fichiers sons de l'applications
      * (annonce + messages.)
-     * <p>
+     *
      * voir le test a faire dans Annonce.java  --> initUI()
-     **/
+     *
+     *
+     * **/
 
-    private void initUI() {
+    private void initUI(){
         btnSenregistrer = findViewById(R.id.btnSenregistrer);
         btnSeConnecter = findViewById(R.id.btnSeConnecter);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth= FirebaseAuth.getInstance();
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
