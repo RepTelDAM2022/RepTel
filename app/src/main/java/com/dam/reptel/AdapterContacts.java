@@ -26,9 +26,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 
 public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, AdapterContacts.ContactsViewHolder> {
 
@@ -46,22 +44,15 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
     protected void onBindViewHolder(@NonNull AdapterContacts.ContactsViewHolder contactsViewHolder, int position, @NonNull ModelRecord model) {
         String nom = model.getNomdelAppelant();
         String tel = model.getNumTeldelAppelant();
-//        long timestamp = Integer.parseInt(model.getTimeStamp());
-        long timestamp = Long.parseLong(model.getTimeStamp());
+        String timestamp = model.getTimeStamp();
         Bitmap photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
 
         contactsViewHolder.tv_nomcontact.setText(nom);
         contactsViewHolder.tv_telcontact.setText(tel);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        Date resultdate = new Date(timestamp);
-        String newDate = sdf.format(resultdate);
-
-        contactsViewHolder.tv_timestamp.setText(newDate);
+        contactsViewHolder.tv_timestamp.setText((CharSequence) timestamp);
 
         // recherche de la photo du contact dans les contacts a partir du numero de tel
-        //photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
-        //image.setImageBitmap(photo);
+        // photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
 
         // ajout des options pour afficher les photos des contacts.
         RequestOptions options = new RequestOptions()
@@ -125,8 +116,8 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
 
     private  OnItemClickListener contactClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener contactClickListener){
-        this.contactClickListener = contactClickListener;
+    public void setOnItemClickListener(OnItemClickListener filmClickListener){
+        this.contactClickListener = filmClickListener;
     }
 
     public static Bitmap getDisplayPhoto(Context context, String contactNumber) {
