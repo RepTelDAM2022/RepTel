@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,21 +33,24 @@ public class ContactsRecyclerView extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
     private String userID;
+    private String ColKeyPhoneNumber;
 
     /** initialisation **/
     private void init(){
         rvContacts = findViewById(R.id.rvContacts);
         rvContacts.setHasFixedSize(true);   /** ?????? faut-il mettre ca???? la taille de la bdd peut changer a tout moment **/
-        rvContacts.setLayoutManager(new LinearLayoutManagerWrapper(context, LinearLayoutManager.VERTICAL, false));
-//        Log.i(TAG, "init: avant declaration toolbar");
+//        rvContacts.setLayoutManager(new LinearLayoutManagerWrapper(this, LinearLayoutManager.VERTICAL, false));
+        rvContacts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
 //        toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
-//        Log.i(TAG, "init: apres declaration toolbar");
 
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = firebaseAuth.getCurrentUser().getUid();
+
+        Log.i(TAG, "init: userId = " + userID);
     }
 
     public class LinearLayoutManagerWrapper extends LinearLayoutManager {
@@ -104,15 +108,18 @@ public class ContactsRecyclerView extends AppCompatActivity {
 
     /** recuperer les donnees de la bdd **/
     private void getDataFromFirestore(){
+        Log.i(TAG, "getDataFromFirestore: userID = " + userID);
+        Log.i(TAG, "getDataFromFirestore: KEY_MYNUM = " + KEY_MYNUM);
         Query query = db.collection(userID).orderBy(KEY_MYNUM);
-
-        FirestoreRecyclerOptions<ModelRecord> contact =
+        Log.i(TAG, "getDataFromFirestore: " + query);
+        FirestoreRecyclerOptions<ModelRecord> record =
                 new FirestoreRecyclerOptions.Builder<ModelRecord>()
                         .setQuery(query, ModelRecord.class)
                         .build();
 
-        adapterContacts = new AdapterContacts(contact);
+        adapterContacts = new AdapterContacts(record);
         rvContacts.setAdapter(adapterContacts);
+
     }
 
     @Override
@@ -123,5 +130,22 @@ public class ContactsRecyclerView extends AppCompatActivity {
         init();
         getDataFromFirestore();
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapterContacts.stopListening();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(curentUser == null){
+            startActivity(new Intent(ContactsRecyclerView.this, SignupEmail.class));
+        } else {
+            adapterContacts.startListening();
+        }
     }
 }

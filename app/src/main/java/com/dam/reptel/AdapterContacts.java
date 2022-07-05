@@ -42,19 +42,17 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
 
     @Override
     protected void onBindViewHolder(@NonNull AdapterContacts.ContactsViewHolder contactsViewHolder, int position, @NonNull ModelRecord model) {
-        String nom = model.getNomAppelant();
-        String tel = model.getTelAppelant();
-        Timestamp timestamp = model.getTimeStamp();
-        Bitmap photo;
-        ImageView image = null;
+        String nom = model.getNomdelAppelant();
+        String tel = model.getNumTeldelAppelant();
+        String timestamp = model.getTimeStamp();
+        Bitmap photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
 
         contactsViewHolder.tv_nomcontact.setText(nom);
         contactsViewHolder.tv_telcontact.setText(tel);
         contactsViewHolder.tv_timestamp.setText((CharSequence) timestamp);
 
         // recherche de la photo du contact dans les contacts a partir du numero de tel
-        photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
-        image.setImageBitmap(photo);
+        // photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
 
         // ajout des options pour afficher les photos des contacts.
         RequestOptions options = new RequestOptions()
@@ -64,9 +62,10 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
 
         Context context = contactsViewHolder.iv_contactpicture.getContext();
         Glide.with(context)
-                .load(image)
+                .load(photo)
                 .apply(options)
                 .fitCenter()
+                .circleCrop()
                 .override(150, 150)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(contactsViewHolder.iv_contactpicture);

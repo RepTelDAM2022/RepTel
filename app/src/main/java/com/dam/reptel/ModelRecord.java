@@ -1,58 +1,88 @@
 package com.dam.reptel;
 
+import android.graphics.Bitmap;
+
 import java.sql.Timestamp;
 
 public class ModelRecord {
 
-    private String numReception;
-    private String telAppelant;
-    private String nomAppelant;
-    private String lienMessage;
-    private Timestamp timeStamp;
+    private String RegisteredUserPhoneNumber;
+    private String NumTeldelAppelant;
+    private String NomdelAppelant;
+    private String NomdelAppelantMinuscule;
+    private String LienMessageDistant;
+    private String LienMessageLocal;
+    private String TimeStamp;
     boolean flag;
-
-    public ModelRecord(String numReception, String telAppelant, String nomAppelant, String lienMessage, Timestamp timeStamp, boolean flag) {
-        this.numReception = numReception;
-        this.telAppelant = telAppelant;
-        this.nomAppelant = nomAppelant;
-        this.lienMessage = lienMessage;
-        this.timeStamp = timeStamp;
-        this.flag = flag;
-    }
 
     public ModelRecord() {
     }
 
-    public String getNumReception() {
-        return numReception;
+    public ModelRecord(String registeredUserPhoneNumber, String numTeldelAppelant, String nomdelAppelant, String nomdelAppelantMinuscule, String lienMessageDistant, String lienMessageLocal, String timeStamp, boolean flag) {
+        RegisteredUserPhoneNumber = registeredUserPhoneNumber;
+        NumTeldelAppelant = numTeldelAppelant;
+        NomdelAppelant = nomdelAppelant;
+        NomdelAppelantMinuscule = nomdelAppelantMinuscule;
+        LienMessageDistant = lienMessageDistant;
+        LienMessageLocal = lienMessageLocal;
+        TimeStamp = timeStamp;
+        this.flag = flag;
     }
 
-    public void setNumReception(String numReception) {
-        this.numReception = numReception;
+    public String getRegisteredUserPhoneNumber() {
+        return RegisteredUserPhoneNumber;
     }
 
-    public String getTelAppelant() {
-        return telAppelant;
+    public void setRegisteredUserPhoneNumber(String registeredUserPhoneNumber) {
+        RegisteredUserPhoneNumber = registeredUserPhoneNumber;
     }
 
-    public void setTelAppelant(String telAppelant) {
-        this.telAppelant = telAppelant;
+    public String getNumTeldelAppelant() {
+        return NumTeldelAppelant;
     }
 
-    public String getLienMessage() {
-        return lienMessage;
+    public void setNumTeldelAppelant(String numTeldelAppelant) {
+        NumTeldelAppelant = numTeldelAppelant;
     }
 
-    public void setLienMessage(String lienMessage) {
-        this.lienMessage = lienMessage;
+    public String getNomdelAppelant() {
+        return NomdelAppelant;
     }
 
-    public Timestamp getTimeStamp() {
-        return timeStamp;
+    public void setNomdelAppelant(String nomdelAppelant) {
+        NomdelAppelant = nomdelAppelant;
     }
 
-    public void setTimeStamp(Timestamp timeStamp) {
-        this.timeStamp = timeStamp;
+    public String getNomdelAppelantMinuscule() {
+        return NomdelAppelantMinuscule;
+    }
+
+    public void setNomdelAppelantMinuscule(String nomdelAppelantMinuscule) {
+        NomdelAppelantMinuscule = nomdelAppelantMinuscule;
+    }
+
+    public String getLienMessageDistant() {
+        return LienMessageDistant;
+    }
+
+    public void setLienMessageDistant(String lienMessageDistant) {
+        LienMessageDistant = lienMessageDistant;
+    }
+
+    public String getLienMessageLocal() {
+        return LienMessageLocal;
+    }
+
+    public void setLienMessageLocal(String lienMessageLocal) {
+        LienMessageLocal = lienMessageLocal;
+    }
+
+    public String getTimeStamp() {
+        return TimeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        TimeStamp = timeStamp;
     }
 
     public boolean isFlag() {
@@ -61,13 +91,5 @@ public class ModelRecord {
 
     public void setFlag(boolean flag) {
         this.flag = flag;
-    }
-
-    public String getNomAppelant() {
-        return nomAppelant;
-    }
-
-    public void setNomAppelant(String nomAppelant) {
-        this.nomAppelant = nomAppelant;
     }
 }
