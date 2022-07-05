@@ -60,8 +60,8 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
         contactsViewHolder.tv_timestamp.setText(newDate);
 
         // recherche de la photo du contact dans les contacts a partir du numero de tel
-        photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
-        image.setImageBitmap(photo);
+        //photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
+        //image.setImageBitmap(photo);
 
         // ajout des options pour afficher les photos des contacts.
         RequestOptions options = new RequestOptions()
