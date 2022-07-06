@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/silverv"
     tools:context=".RecordsActivity">
 
     <LinearLayout
@@ -34,6 +35,9 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
             tools:text="Nom du contact" />
     </LinearLayout>
 

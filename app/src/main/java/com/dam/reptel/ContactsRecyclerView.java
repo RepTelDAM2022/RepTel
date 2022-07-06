@@ -156,6 +156,33 @@ public class ContactsRecyclerView extends AppCompatActivity {
 //            }
 //        });
 
+//    btn_modifier.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            Log.i(TAG, "onClick: "+tv_auteur_livre.getText().toString());
+//
+//            int nombredespages = Integer.parseInt(tv_nombres_pages_livres.getText().toString());
+//            Log.i(TAG, "nombredespages: "+nombredespages);
+//            if (tv_title_livre.getText().toString().equals("")) {
+//                Toast.makeText(ModifierLivreBD.this, "Veuillez saisir un titre.", Toast.LENGTH_LONG).show();
+//            }
+//            livresRef.document(id_BD).update(
+//                    "title_livre", tv_title_livre.getText().toString(),
+//                    "auteur_livre",tv_auteur_livre.getText().toString(),
+//                    "editeur_livre",tv_editeur_livre.getText().toString(),
+//                    "date_parution_livre",tv_parution_livre.getText().toString(),
+//                    "resume_livre",tv_resume_livre.getText().toString(),
+//                    "isbn_livre",tv_isbn_livre.getText().toString(),
+//                    "nombre_livres",nombredespages,
+//                    "url_cover_livre",uriPhoto
+//
+//            );
+//
+//            Toast.makeText(ModifierLivreBD.this, "Mise à jour effectuée avec succès.", Toast.LENGTH_LONG).show();
+//
+//        }
+//    });
+
 
         //Query queryLivre = livresRef.whereEqualTo(documentId(),query2);
 

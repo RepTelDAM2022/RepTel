@@ -1,7 +1,10 @@
 package com.dam.reptel;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,11 +39,13 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
     @Override
     protected void onBindViewHolder(@NonNull AdapterRecords.RecordsViewHolder recordsViewHolder, int position, @NonNull ModelRecord model) {
 
+
+
         /** #On utilise le model pour récupérer les données qui nous intéresse **/
         String nom = model.getNomdelAppelant();
         String numAppelant = model.getNumTeldelAppelant();
         long timestamp = model.getTimeStamp();
-
+        String mFile = model.getLienMessageLocal();
 
         /** #On associe les données récupérées avec le holder de vue **/
 
