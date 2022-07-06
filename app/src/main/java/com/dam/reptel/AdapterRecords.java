@@ -1,6 +1,13 @@
 package com.dam.reptel;
 
+import android.content.ContentUris;
+import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +21,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecords, AdapterRecords.RecordsViewHolder> {
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, AdapterRecords.RecordsViewHolder> {
 
     private static final String TAG = "AdapterRecords";
 
@@ -24,19 +35,36 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecords, Adapt
      *
      * @param options
      */
-    public AdapterRecords(@NonNull FirestoreRecyclerOptions<ModelRecords> options) { super(options); }
+    public AdapterRecords(@NonNull FirestoreRecyclerOptions<ModelRecord> options) { super(options); }
+
+    @Override
+    protected void onBindViewHolder(@NonNull AdapterRecords.RecordsViewHolder recordsViewHolder, int position, @NonNull ModelRecord model) {
+
+        /** #On utilise le model pour récupérer les données qui nous intéresse **/
+        String nom = model.getNomdelAppelant();
+        String numAppelant = model.getNumTeldelAppelant();
+        long timestamp = model.getTimeStamp();
+
+
+        /** #On associe les données récupérées avec le holder de vue **/
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Date resultDate = new Date(timestamp);
+        String newDate = sdf.format(resultDate);
+
+        recordsViewHolder.tvRecordDate.setText(newDate);
+    }
+
+
 
     /** Class FilmsViewHolder */
     public class RecordsViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivPlay;
-        private TextView tvRecordName, tvRecordDuration, tvRecordDate;
+        private TextView tvRecordName, tvRecordDuration, tvRecordDate, tvNomAppelant;
 
         public RecordsViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ivPlay = itemView.findViewById(R.id.ivPlay);
-            tvRecordName = itemView.findViewById(R.id.tvRecordName);
-            tvRecordDuration = itemView.findViewById(R.id.tvRecordDuration);
             tvRecordDate = itemView.findViewById(R.id.tvRecordDate);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -72,36 +100,29 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecords, Adapt
         //return null;
     }
 
-    @Override
-    protected void onBindViewHolder(@NonNull AdapterRecords.RecordsViewHolder recordsViewHolder, int position, @NonNull ModelRecords modelRecords) {
+    public static Bitmap getDisplayPhoto(Context context, String contactNumber) {
 
-        /** #On utilise le model pour récupérer les données qui nous intéresse **/
-        String recName = modelRecords.getRecordName();
-        String recDuration = modelRecords.getRecordDuration();
-        String recDate = modelRecords.getRecordDate();
-        Uri audioUri = modelRecords.getRecordUri();
+        contactNumber = Uri.encode(contactNumber);
+        int phoneContactID = -1;
+        Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, contactNumber),
+                new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID }, null, null, null);
+        while (contactLookupCursor.moveToNext()) {
+            phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
+        }
+        contactLookupCursor.close();
 
-        /** #On associe les données récupérées avec le holder de vue **/
-        recordsViewHolder.tvRecordName.setText(recName);
-        recordsViewHolder.tvRecordDate.setText(recDuration);
-        recordsViewHolder.tvRecordDuration.setText(recDate);
+        Bitmap photo = null;
+        if (phoneContactID != -1) {
+            Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, phoneContactID);
+            Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
+            try {
+                AssetFileDescriptor fd = context.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
 
-        /** #On associe l'audio avec l'url **/
-//        RequestOptions options = new RequestOptions()
-//                .centerCrop()
-//                .error(R.drawable.ic_movie_24_grey)
-//                .placeholder(R.drawable.ic_movie_24_grey);
-//
-//        Context context = filmsViewHolder.ivAffiche.getContext();
-//        Glide.with(context)
-//                //On va loader l'image depuis le chemin vers le dossier de stockage des covers.
-//                .load(affiche)
-//                .apply(options)
-//                .fitCenter()
-//                .override(150,150)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL) //Affichage plus rapide de l'image
-//                .into(filmsViewHolder.ivAffiche);
-        /** #L'adapter est fini retournons dans le MainActivity pour récupérer les données via le fichier JSON **/
+                photo = BitmapFactory.decodeFileDescriptor(fd.getFileDescriptor());
+            } catch (IOException e) {
+            }
+        }
 
+        return photo;
     }
 }

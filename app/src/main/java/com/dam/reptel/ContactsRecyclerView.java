@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -119,53 +120,93 @@ public class ContactsRecyclerView extends AppCompatActivity {
     }
 
     /** recuperer les donnees de la bdd **/
-    private void getDataFromFirestore(){
+//    public void getBooksFromDB(){
+//        Query query2 = citationsRef;
+//        query2.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                ArrayList<String> listeLivres=new ArrayList<>();
+//                if(task.isSuccessful()){
+//                    for(DocumentSnapshot documentSnapshot : task.getResult()){
+////                        Log.i(TAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
+//                        Log.i(TAG, documentSnapshot.getString("id_BD_livre"));
+//                        listeLivres.add(documentSnapshot.getString("id_BD_livre"));
+////citiesRef.whereIn("country", Arrays.asList("USA", "Japan"));
+//                    }
+//                    Log.i(TAG, "mess" + listeLivres);
+//                    Set<String> mySet = new HashSet<String>(listeLivres);
+//                    ArrayList<String> listSansDoublons = new ArrayList<String>(mySet);
+//                    Log.i(TAG, "listSansDoublons: "+listSansDoublons);
+//                    Query query3 = livresRef.whereIn(documentId(), listSansDoublons);
+//
+////                    Log.i(TAG, "Query2: "+query3.toString());
+////        Query query = livresRef.orderBy("title_livre");
+//                    FirestoreRecyclerOptions<ModelDetailsLivre> livres = new FirestoreRecyclerOptions.Builder<ModelDetailsLivre>()
+//                            .setQuery(query3, ModelDetailsLivre.class)
+//                            .build();
+//
+//                    adapterBook = new AdapterBookNbrCitations(livres);
+//                    rvLivres.setAdapter(adapterBook);
+//                    if (progressDialog.isShowing()){
+//                        progressDialog.dismiss();
+//                    }
+//                    adapterBook.startListening();
+//
+//                }
+//            }
+//        });
+
+
+        //Query queryLivre = livresRef.whereEqualTo(documentId(),query2);
+
+
+        private void getDataFromFirestore(){
 //        Log.i(TAG, "getDataFromFirestore: avant la query userID = " + userID);
 
 
-        db.collection(userID)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.i(TAG, document.getId() + " => " + document.get(KEY_CALLERSNUM));
-
-                                    modelRecord.setLienMessageDistant((String) document.get(KEY_MESSAGE));
-                                    modelRecord.setLienMessageLocal((String) document.get(KEY_MESSAGE_LOCAL));
-                                    modelRecord.setNomdelAppelant((String) document.get(KEY_CALLERSNAME));
-                                    modelRecord.setNomdelAppelantMinuscule((String) document.get(KEY_CALLERSNAMELOWERCASE));
-                                    modelRecord.setNumTeldelAppelant((String) document.get(KEY_CALLERSNUM));
-                                    modelRecord.setRegisteredUserPhoneNumber((String) document.get(KEY_MYNUM));
-                                    modelRecord.setTimeStamp((Long) document.get(KEY_TIMESTAMP));
-                                    Log.i(TAG, "onComplete: doc timestamp" + document.get(KEY_TIMESTAMP));
-                                    modelRecord.setFlag((Boolean) document.get(KEY_FLAG));
-
-                                    tableauRecords.add(modelRecord);
-                                    Log.i(TAG, "onComplete: tab timestamp " + tableauRecords.get(0).getTimeStamp());
-
-//                                    Log.i(TAG, "onComplete: taille tableau = " + tableauRecords.size());
-//                                    Log.i(TAG, "onComplete: tableau = " + tableauRecords.toString());
-//                                    Log.i(TAG, "onComplete: num tel appelant = " + tableauRecords.get(0).getNumTeldelAppelant());
-//                                    Log.i(TAG, "onComplete: nom appelant = " + tableauRecords.get(0).getNomdelAppelant());
-//                                    Log.i(TAG, "onComplete: timestamp 0.0 = " + tableauRecords.get(0).getTimeStamp());
-//                                    if (tableauRecords.size()==2){
-//                                    Log.i(TAG, "onComplete: timestamp 1.0 = " + tableauRecords.get(0).getTimeStamp());
-//                                    Log.i(TAG, "onComplete: timestamp 1.1 = " + tableauRecords.get(1).getTimeStamp());
-//                                    }
-                                    if (tableauRecords.size()==3){
-                                        Log.i(TAG, "onComplete: timestamp 2.0 = " + tableauRecords.get(0).getTimeStamp());
-                                        Log.i(TAG, "onComplete: timestamp 2.1 = " + tableauRecords.get(1).getTimeStamp());
-                                        Log.i(TAG, "onComplete: timestamp 2.2 = " + tableauRecords.get(2).getTimeStamp());
-                                        }
-
-                                }
-                            } else {
-                                Log.i(TAG, "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
+//        db.collection(userID)
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    Log.i(TAG, document.getId() + " => " + document.get(KEY_CALLERSNUM));
+//
+//                                    modelRecord.setLienMessageDistant((String) document.get(KEY_MESSAGE));
+//                                    modelRecord.setLienMessageLocal((String) document.get(KEY_MESSAGE_LOCAL));
+//                                    modelRecord.setNomdelAppelant((String) document.get(KEY_CALLERSNAME));
+//                                    modelRecord.setNomdelAppelantMinuscule((String) document.get(KEY_CALLERSNAMELOWERCASE));
+//                                    modelRecord.setNumTeldelAppelant((String) document.get(KEY_CALLERSNUM));
+//                                    modelRecord.setRegisteredUserPhoneNumber((String) document.get(KEY_MYNUM));
+//                                    modelRecord.setTimeStamp((Long) document.get(KEY_TIMESTAMP));
+//                                    Log.i(TAG, "onComplete: doc timestamp" + document.get(KEY_TIMESTAMP));
+//                                    modelRecord.setFlag((Boolean) document.get(KEY_FLAG));
+//
+//                                    tableauRecords.add(modelRecord);
+//                                    Log.i(TAG, "onComplete: tab timestamp " + tableauRecords.get(0).getTimeStamp());
+//
+////                                    Log.i(TAG, "onComplete: taille tableau = " + tableauRecords.size());
+////                                    Log.i(TAG, "onComplete: tableau = " + tableauRecords.toString());
+////                                    Log.i(TAG, "onComplete: num tel appelant = " + tableauRecords.get(0).getNumTeldelAppelant());
+////                                    Log.i(TAG, "onComplete: nom appelant = " + tableauRecords.get(0).getNomdelAppelant());
+////                                    Log.i(TAG, "onComplete: timestamp 0.0 = " + tableauRecords.get(0).getTimeStamp());
+////                                    if (tableauRecords.size()==2){
+////                                    Log.i(TAG, "onComplete: timestamp 1.0 = " + tableauRecords.get(0).getTimeStamp());
+////                                    Log.i(TAG, "onComplete: timestamp 1.1 = " + tableauRecords.get(1).getTimeStamp());
+////                                    }
+//                                    if (tableauRecords.size()==3){
+//                                        Log.i(TAG, "onComplete: timestamp 2.0 = " + tableauRecords.get(0).getTimeStamp());
+//                                        Log.i(TAG, "onComplete: timestamp 2.1 = " + tableauRecords.get(1).getTimeStamp());
+//                                        Log.i(TAG, "onComplete: timestamp 2.2 = " + tableauRecords.get(2).getTimeStamp());
+//                                        }
+//
+//                                }
+//                            } else {
+//                                Log.i(TAG, "Error getting documents: ", task.getException());
+//                            }
+//                        }
+//                    });
 
 
 
@@ -190,6 +231,17 @@ public class ContactsRecyclerView extends AppCompatActivity {
 
         init();
         getDataFromFirestore();
+
+        adapterContacts.setOnItemClickListener(new AdapterContacts.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Log.i(TAG, "onItemClick: dans ContactsRecyclerView");
+//                Intent intent = new Intent(context, RecordsRecyclerView.class);
+//                intent.putExtra("numTel", );
+//                context.startActivity(intent);
+
+            }
+        });
 
     }
 

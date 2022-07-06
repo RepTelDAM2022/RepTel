@@ -2,6 +2,7 @@ package com.dam.reptel;
 
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -33,6 +35,13 @@ import java.util.Date;
 
 public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, AdapterContacts.ContactsViewHolder> {
     private static final String TAG = "AdapterContacts";
+    private Context context;
+
+    public AdapterContacts(@NonNull FirestoreRecyclerOptions<ModelRecord> options, Context context, OnItemClickListener contactClickListener) {
+        super(options);
+        this.context = context;
+        this.contactClickListener = contactClickListener;
+    }
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -40,6 +49,7 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
      *
      * @param options
      */
+
     public AdapterContacts(@NonNull FirestoreRecyclerOptions<ModelRecord> options) {
         super(options);
     }
@@ -87,6 +97,20 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(contactsViewHolder.iv_contactpicture);
 
+        /** fin du remplissage des donnees dans le RV **/
+
+        /** programmer le click sur un contact **/
+
+        contactsViewHolder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: dans AdaptersContacts");
+                Intent intent = new Intent(context, RecordsRecyclerView.class);
+                intent.putExtra("numTel", tel);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @NonNull
@@ -103,6 +127,7 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
         private ImageView iv_contactpicture;
         private TextView tv_nomcontact, tv_telcontact, tv_timestamp;
         private Button btn_flag;
+        CardView mainLayout;
 
         public ContactsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,6 +137,8 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
             tv_telcontact = itemView.findViewById(R.id.tv_contactnum);
             tv_timestamp = itemView.findViewById(R.id.tv_timestamp);
             btn_flag = itemView.findViewById(R.id.bt_flag);
+
+            mainLayout = itemView.findViewById(R.id.cv_recyclercontactitem);
 
             // gestion du click
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -133,8 +160,8 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
 
     private  OnItemClickListener contactClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener filmClickListener){
-        this.contactClickListener = filmClickListener;
+    public void setOnItemClickListener(OnItemClickListener contactClickListener){
+        this.contactClickListener = contactClickListener;
     }
 
     public static Bitmap getDisplayPhoto(Context context, String contactNumber) {

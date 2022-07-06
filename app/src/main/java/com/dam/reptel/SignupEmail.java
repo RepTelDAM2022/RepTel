@@ -151,7 +151,7 @@ public class SignupEmail extends AppCompatActivity {
                             });
 
                     userID = firebaseAuth.getCurrentUser().getUid();
-                    enregistrerDansLaBDD();
+                    //enregistrerDansLaBDD();
 
                     /**
                      *
@@ -171,83 +171,40 @@ public class SignupEmail extends AppCompatActivity {
         });
     }
 
-//        public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
-//                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+//    private void enregistrerDansLaBDD() {
 //
-//        public static boolean validate(String email) {
-//            Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
-//            return matcher.find();
-//        }
-
-    private void enregistrerDansLaBDD() {
-
-        String myPhoneNumber = etNumTel.getText().toString().trim();
-        long time = System.currentTimeMillis();
-
-//        Log.i(TAG, "My phone Number = " + myPhoneNumber);
-//        Log.i(TAG, "Num Tel appelant = " + numAppelant.getText().toString());
-//        Log.i(TAG, "Nom Appelant = " + nomContact);
-//        Log.i(TAG, "Lien message local = " + uriToParse);
-//        Log.i(TAG, "TimeStamp = " + time);
-//        Log.i(TAG, "Flag = " + flagLu);
-//        Log.i(TAG, "Nom appelant minuscule = " + nomContact.toLowerCase(Locale.ROOT));
-
-        CollectionReference productsRef = FirebaseFirestore.getInstance().collection(userID);
-
-//       db.collection(userId)
-////               .whereEqualTo(KEY_CALLERSNUM, num_Appelant)
-//               .get()
-//               .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                   @Override
-//                   public void onSuccess (QuerySnapshot queryDocumentSnapshots) {
-//                           for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-//                               Log.i(TAG, "onComplete: " + "data num = " + document.get(KEY_CALLERSNUM) + " num appelant = " + num_Appelant);
-//                               if (Objects.equals(document.get(KEY_CALLERSNUM), num_Appelant)) {
-//                                   Log.i(TAG, "onComplete: appelant exist");
-//                               } else {
-//                                   Log.i(TAG, "onComplete: appelant n'existe pas");
-//                               }
-//                           }
+//        String myPhoneNumber = etNumTel.getText().toString().trim();
+//        long time = System.currentTimeMillis();
+//
+//        CollectionReference productsRef = FirebaseFirestore.getInstance().collection(userID);
+//
+//        // on prepare les donnees pour les envoyer dans la bdd
+//        Map<String, Object> datas = new HashMap<>();
+//        datas.put(KEY_MYNUM, myPhoneNumber);
+//        datas.put(KEY_CALLERSNUM, "00000000");
+//        datas.put(KEY_CALLERSNAME, "Nom Appelant");
+//        datas.put(KEY_MESSAGE, null);
+//        datas.put(KEY_MESSAGE_LOCAL, null);
+//        datas.put(KEY_TIMESTAMP, time);
+//        datas.put(KEY_FLAG, "false");
+//        datas.put(KEY_FIRSTMESSAGE, "true");
+//        datas.put(KEY_CALLERSNAMELOWERCASE, null);
+//
+//        productsRef.add(datas)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.i(TAG, "onSuccess: DocumentSnapshot added with ID = " + documentReference.getId());
 //                    }
-//               })
-//               .addOnFailureListener(new OnFailureListener() {
-//                   @Override
-//                   public void onFailure(@NonNull Exception e) {
-//                       Log.i(TAG, "onFailure: n'existe pas?");
-//                   }
-//               });
-
-
-
-
-
-
-        // on prepare les donnees pour les envoyer dans la bdd
-        Map<String, Object> datas = new HashMap<>();
-        datas.put(KEY_MYNUM, myPhoneNumber);
-        datas.put(KEY_CALLERSNUM, "00000000");
-        datas.put(KEY_CALLERSNAME, "Nom Appelant");
-        datas.put(KEY_MESSAGE, null);
-        datas.put(KEY_MESSAGE_LOCAL, null);
-        datas.put(KEY_TIMESTAMP, time);
-        datas.put(KEY_FLAG, "false");
-        datas.put(KEY_FIRSTMESSAGE, "true");
-        datas.put(KEY_CALLERSNAMELOWERCASE, null);
-
-        productsRef.add(datas)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.i(TAG, "onSuccess: DocumentSnapshot added with ID = " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "onFailure: error adding document to db " + e);
-                    }
-                });
-    }
-
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.i(TAG, "onFailure: error adding document to db " + e);
+//                    }
+//                });
+//    }
+//
 
 }

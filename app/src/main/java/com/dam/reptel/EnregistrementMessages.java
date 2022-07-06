@@ -127,8 +127,9 @@ public class EnregistrementMessages extends AppCompatActivity {
                     btnREC.setText("REC");
                     recording = false;
                     num_Appelant = numAppelant.getText().toString();
-                    verifierExistenceNumero(num_Appelant);
-                    uploadAudiotoDB();
+                    enregistrerDansLaBDD();
+//                    verifierExistenceNumero(num_Appelant);
+//                    uploadAudiotoDB();
                 } else {
                     if (!numAppelant.getText().toString().equals("")) {
                         nomAppelant = getContactNameByPhoneNumber(EnregistrementMessages.this, numAppelant.getText().toString());
