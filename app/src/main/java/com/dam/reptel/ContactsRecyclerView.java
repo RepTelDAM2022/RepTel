@@ -169,9 +169,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
 
 
 
-        Query query = db.collection(userID)
-                .orderBy(KEY_TIMESTAMP, Query.Direction.DESCENDING)
-                ;
+        Query query = db.collection(userID).orderBy(KEY_TIMESTAMP, Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<ModelRecord> record =
                 new FirestoreRecyclerOptions.Builder<ModelRecord>()

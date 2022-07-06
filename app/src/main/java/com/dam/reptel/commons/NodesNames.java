@@ -16,6 +16,7 @@ public interface NodesNames {
     String KEY_MESSAGE_LOCAL = "LienMessageLocal";
     String KEY_TIMESTAMP = "TimeStamp";
     String KEY_FLAG = "flag";
+    String KEY_FIRSTMESSAGE = "FirstMessage";
 
     // le dossier de stockage des messages dans le storage
     String MESSAGE_FOLDER = "Messages";

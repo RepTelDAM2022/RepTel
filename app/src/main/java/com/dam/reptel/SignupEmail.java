@@ -1,5 +1,15 @@
 package com.dam.reptel;
 
+import static com.dam.reptel.commons.NodesNames.KEY_CALLERSNAME;
+import static com.dam.reptel.commons.NodesNames.KEY_CALLERSNAMELOWERCASE;
+import static com.dam.reptel.commons.NodesNames.KEY_CALLERSNUM;
+import static com.dam.reptel.commons.NodesNames.KEY_FIRSTMESSAGE;
+import static com.dam.reptel.commons.NodesNames.KEY_FLAG;
+import static com.dam.reptel.commons.NodesNames.KEY_MESSAGE;
+import static com.dam.reptel.commons.NodesNames.KEY_MESSAGE_LOCAL;
+import static com.dam.reptel.commons.NodesNames.KEY_MYNUM;
+import static com.dam.reptel.commons.NodesNames.KEY_TIMESTAMP;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,8 +28,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class SignupEmail extends AppCompatActivity {
 
@@ -30,6 +45,7 @@ public class SignupEmail extends AppCompatActivity {
     private TextInputEditText etPrenomNom, etNumTel, etMotPass, etConfMotPass, etEmail;
     private String nom, numTel, motPasse, confMotPass, email;
     private Button btnSenregistrer;
+    private String userID;
 
     /** ajout de FirebaseAuth pour enregistrer l'utilisateur
      * et ajout de la firebase**/
@@ -134,6 +150,9 @@ public class SignupEmail extends AppCompatActivity {
                                 }
                             });
 
+                    userID = firebaseAuth.getCurrentUser().getUid();
+                    enregistrerDansLaBDD();
+
                     /**
                      *
                      *
@@ -159,5 +178,76 @@ public class SignupEmail extends AppCompatActivity {
 //            Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
 //            return matcher.find();
 //        }
+
+    private void enregistrerDansLaBDD() {
+
+        String myPhoneNumber = etNumTel.getText().toString().trim();
+        long time = System.currentTimeMillis();
+
+//        Log.i(TAG, "My phone Number = " + myPhoneNumber);
+//        Log.i(TAG, "Num Tel appelant = " + numAppelant.getText().toString());
+//        Log.i(TAG, "Nom Appelant = " + nomContact);
+//        Log.i(TAG, "Lien message local = " + uriToParse);
+//        Log.i(TAG, "TimeStamp = " + time);
+//        Log.i(TAG, "Flag = " + flagLu);
+//        Log.i(TAG, "Nom appelant minuscule = " + nomContact.toLowerCase(Locale.ROOT));
+
+        CollectionReference productsRef = FirebaseFirestore.getInstance().collection(userID);
+
+//       db.collection(userId)
+////               .whereEqualTo(KEY_CALLERSNUM, num_Appelant)
+//               .get()
+//               .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                   @Override
+//                   public void onSuccess (QuerySnapshot queryDocumentSnapshots) {
+//                           for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+//                               Log.i(TAG, "onComplete: " + "data num = " + document.get(KEY_CALLERSNUM) + " num appelant = " + num_Appelant);
+//                               if (Objects.equals(document.get(KEY_CALLERSNUM), num_Appelant)) {
+//                                   Log.i(TAG, "onComplete: appelant exist");
+//                               } else {
+//                                   Log.i(TAG, "onComplete: appelant n'existe pas");
+//                               }
+//                           }
+//                    }
+//               })
+//               .addOnFailureListener(new OnFailureListener() {
+//                   @Override
+//                   public void onFailure(@NonNull Exception e) {
+//                       Log.i(TAG, "onFailure: n'existe pas?");
+//                   }
+//               });
+
+
+
+
+
+
+        // on prepare les donnees pour les envoyer dans la bdd
+        Map<String, Object> datas = new HashMap<>();
+        datas.put(KEY_MYNUM, myPhoneNumber);
+        datas.put(KEY_CALLERSNUM, "00000000");
+        datas.put(KEY_CALLERSNAME, "Nom Appelant");
+        datas.put(KEY_MESSAGE, null);
+        datas.put(KEY_MESSAGE_LOCAL, null);
+        datas.put(KEY_TIMESTAMP, time);
+        datas.put(KEY_FLAG, "false");
+        datas.put(KEY_FIRSTMESSAGE, "true");
+        datas.put(KEY_CALLERSNAMELOWERCASE, null);
+
+        productsRef.add(datas)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.i(TAG, "onSuccess: DocumentSnapshot added with ID = " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "onFailure: error adding document to db " + e);
+                    }
+                });
+    }
+
 
 }

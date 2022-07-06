@@ -14,11 +14,20 @@ public class ModelRecord {
     private String LienMessageLocal;
     private long TimeStamp;
     boolean flag;
+    boolean firstMessage;
 
     public ModelRecord() {
     }
 
-    public ModelRecord(String registeredUserPhoneNumber, String numTeldelAppelant, String nomdelAppelant, String nomdelAppelantMinuscule, String lienMessageDistant, String lienMessageLocal, long timeStamp, boolean flag) {
+    public ModelRecord(String registeredUserPhoneNumber,
+                       String numTeldelAppelant,
+                       String nomdelAppelant,
+                       String nomdelAppelantMinuscule,
+                       String lienMessageDistant,
+                       String lienMessageLocal,
+                       long timeStamp,
+                       boolean flag,
+                       boolean firstMessage) {
         RegisteredUserPhoneNumber = registeredUserPhoneNumber;
         NumTeldelAppelant = numTeldelAppelant;
         NomdelAppelant = nomdelAppelant;
@@ -27,6 +36,7 @@ public class ModelRecord {
         LienMessageLocal = lienMessageLocal;
         TimeStamp = timeStamp;
         this.flag = flag;
+        this.firstMessage = firstMessage;
     }
 
     public String getRegisteredUserPhoneNumber() {
@@ -91,5 +101,13 @@ public class ModelRecord {
 
     public void setFlag(boolean flag) {
         this.flag = flag;
+    }
+
+    public boolean isFirstMessage() {
+        return firstMessage;
+    }
+
+    public void setFirstMessage(boolean firstMessage) {
+        this.firstMessage = firstMessage;
     }
 }
