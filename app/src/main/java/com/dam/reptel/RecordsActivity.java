@@ -1,51 +1,40 @@
 package com.dam.reptel;
 
-import static com.dam.reptel.commons.NodesNames.KEY_CALLERSNUM;
-
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentUris;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
-import com.dam.reptel.commons.NodesNames.*;
+import java.io.IOException;
+
 public class RecordsActivity extends AppCompatActivity {
 
-    private FirebaseFirestore db;
-    private CollectionReference userIdCollection;
-
-    private FirebaseUser currentUser;
-
-    private String appelant;
+    /** Variables Globales **/
+    private String nom, tel;
+    Bitmap photo;
 
     // Les widgets
     TextView tvNomContact;
     ImageView ivPhotoContact;
 
     //init widget
-    private void init(){
+    private void init() {
         tvNomContact = findViewById(R.id.tvNomContact);
         ivPhotoContact = findViewById(R.id.ivPhotoContact);
-    }
-
-    private void initFB(){
-        db = FirebaseFirestore.getInstance();
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        userIdCollection = db.collection(currentUser.toString());
-    }
-
-    private void getDataFromCaller(){
-        appelant = "0789516857";
-       // Apple aux méthodes pour afficher le nom et la photo
-
-       // Set des datas vers les widgets
-
     }
 
     @Override
@@ -53,14 +42,57 @@ public class RecordsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
 
-        // Numéro de l'appeleant depuis l'intent lors du itemclic du premier recycler
-
         init();
-        initFB();
-        getDataFromCaller();
-        // méthode pour remplir le rv
+        Intent intent = getIntent();
+        String nom = intent.getStringExtra("nomAppelant");
+        String tel = intent.getStringExtra("numTel");
+        photo = getDisplayPhoto(this, tel);
+        if (nom!=null){
+            tvNomContact.setText(nom);
+        } else {
+            tvNomContact.setText(tel);
+        }
+        // ajout des options pour afficher les photos des contacts.
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .circleCrop()
+                .error(R.drawable.ic_contacts_24)
+                .placeholder(R.drawable.ic_contacts_24);
 
+        Context context = ivPhotoContact.getContext();
+        Glide.with(context)
+                .load(photo)
+                .apply(options)
+                .fitCenter()
+                .circleCrop()
+                .override(150, 150)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(ivPhotoContact);
+    }
 
+    public static Bitmap getDisplayPhoto(Context context, String contactNumber) {
 
+        contactNumber = Uri.encode(contactNumber);
+        int phoneContactID = -1;
+        Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, contactNumber),
+                new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID }, null, null, null);
+        while (contactLookupCursor.moveToNext()) {
+            phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
+        }
+        contactLookupCursor.close();
+
+        Bitmap photo = null;
+        if (phoneContactID != -1) {
+            Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, phoneContactID);
+            Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
+            try {
+                AssetFileDescriptor fd = context.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
+
+                photo = BitmapFactory.decodeFileDescriptor(fd.getFileDescriptor());
+            } catch (IOException e) {
+            }
+        }
+
+        return photo;
     }
 }

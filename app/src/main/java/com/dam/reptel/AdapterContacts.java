@@ -104,7 +104,12 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
         contactsViewHolder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: dans AdaptersContacts");
+
+                Intent intent1 = new Intent(context, RecordsActivity.class);
+                intent1.putExtra("numTel", tel);
+                intent1.putExtra("nomAppelant", nom);
+                context.startActivity(intent1);
+
                 Intent intent = new Intent(context, RecordsRecyclerView.class);
                 intent.putExtra("numTel", tel);
                 context.startActivity(intent);

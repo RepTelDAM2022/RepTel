@@ -1,13 +1,17 @@
 package com.dam.reptel;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -53,19 +58,38 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
         String newDate = sdf.format(resultDate);
 
         recordsViewHolder.tvRecordDate.setText(newDate);
+
+        /** programmer le click sur un message **/
+
+        recordsViewHolder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String mFile = model.getLienMessageLocal();
+                playAudio(mFile);
+            }
+        });
     }
 
+    /** Méthodes du View Holder */
+    @NonNull
+    @Override
+    public AdapterRecords.RecordsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_records, parent, false);
+        return new RecordsViewHolder(view);
+        //return null;
+    }
 
 
     /** Class FilmsViewHolder */
     public class RecordsViewHolder extends RecyclerView.ViewHolder {
-        private ImageView ivPlay;
-        private TextView tvRecordName, tvRecordDuration, tvRecordDate, tvNomAppelant;
+        private TextView tvRecordDate;
+        CardView mainLayout;
 
         public RecordsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvRecordDate = itemView.findViewById(R.id.tvRecordDate);
+            mainLayout = itemView.findViewById(R.id.cv_record);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,38 +115,21 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
         this.recordClickListener = recordClickListener;
     }
 
-    /** Méthodes du View Holder */
-    @NonNull
-    @Override
-    public AdapterRecords.RecordsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_records, parent, false);
-        return new RecordsViewHolder(view);
-        //return null;
-    }
 
-    public static Bitmap getDisplayPhoto(Context context, String contactNumber) {
 
-        contactNumber = Uri.encode(contactNumber);
-        int phoneContactID = -1;
-        Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, contactNumber),
-                new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID }, null, null, null);
-        while (contactLookupCursor.moveToNext()) {
-            phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
-        }
-        contactLookupCursor.close();
-
-        Bitmap photo = null;
-        if (phoneContactID != -1) {
-            Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, phoneContactID);
-            Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
-            try {
-                AssetFileDescriptor fd = context.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
-
-                photo = BitmapFactory.decodeFileDescriptor(fd.getFileDescriptor());
-            } catch (IOException e) {
-            }
+    private void playAudio(String mFile) {
+        MediaPlayer mPlayer;
+        mPlayer = new MediaPlayer();
+        try {
+            mPlayer.setDataSource(mFile);
+            mPlayer.prepare();;
+            mPlayer.start();
+        } catch (IOException e) {
+            Log.e(TAG, "playAudio: failed");
         }
 
-        return photo;
+
     }
+
+
 }
