@@ -31,6 +31,7 @@ public class RecordsActivity extends AppCompatActivity {
     TextView tvNomContact;
     ImageView ivPhotoContact;
 
+
     //init widget
     private void init() {
         tvNomContact = findViewById(R.id.tvNomContact);

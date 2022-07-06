@@ -105,13 +105,14 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
             @Override
             public void onClick(View v) {
 
-                Intent intent1 = new Intent(context, RecordsActivity.class);
-                intent1.putExtra("numTel", tel);
-                intent1.putExtra("nomAppelant", nom);
-                context.startActivity(intent1);
+//                Intent intent1 = new Intent(context, RecordsActivity.class);
+//                intent1.putExtra("numTel", tel);
+//                intent1.putExtra("nomAppelant", nom);
+//                context.startActivity(intent1);
 
                 Intent intent = new Intent(context, RecordsRecyclerView.class);
                 intent.putExtra("numTel", tel);
+                intent.putExtra("nomAppelant", nom);
                 context.startActivity(intent);
             }
         });

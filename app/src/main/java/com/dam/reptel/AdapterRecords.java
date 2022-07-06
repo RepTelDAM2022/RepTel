@@ -1,21 +1,11 @@
 package com.dam.reptel;
 
-import static android.content.ContentValues.TAG;
-
-import android.content.ContentUris;
-import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -66,6 +56,7 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
             public void onClick(View v) {
                 String mFile = model.getLienMessageLocal();
                 playAudio(mFile);
+
             }
         });
     }
@@ -98,6 +89,8 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
                     if(position != RecyclerView.NO_POSITION && recordClickListener != null) {
                         DocumentSnapshot recordSnapshot = getSnapshots().getSnapshot(position);
                         recordClickListener.onItemClick(recordSnapshot, position);
+//                        int red = Color.parseColor("#FF0000");
+//                        mainLayout.setBackgroundColor(red);
                     }
                 }
             });
