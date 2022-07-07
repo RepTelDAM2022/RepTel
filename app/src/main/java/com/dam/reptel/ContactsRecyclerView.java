@@ -178,18 +178,29 @@ public class ContactsRecyclerView extends AppCompatActivity {
                     for (DocumentSnapshot documentSnapshot : task.getResult()){
                         Log.i(TAG, "onComplete: " + documentSnapshot.getString(KEY_CALLERSNUM));
                         listeContacts.add(documentSnapshot.getString(KEY_CALLERSNUM));
+                        // La meme chose mais avec le flag lu
                     }
                     Log.i(TAG, "onComplete: " + listeContacts);
 
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                         Map<String, Long> counts = listeContacts.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
                         Log.i(TAG, "compteOccurrences: " + counts);
+                        for(Long value : counts.values()){
+                            Log.i(TAG, "Nb appels => " + value);
+                            // Le nombre total d'appels
+
+                        }
+                        for(String key: counts.keySet()){
+                            Log.i(TAG, "Nb appels => " + key);
+                            listeSansDoublons.add(key);
+                        }
                     }
 
-                    Set<String> mySet = new HashSet<String>(listeContacts);
-                    listeSansDoublons = new ArrayList<String>(mySet);
-                    Query query3 = db.collection(userID).whereIn(documentId(), listeSansDoublons);
-//                    Query query3 = db.collection(userID).whereIn(String.valueOf(db.document(userID)), listeSansDoublons);
+
+//                    Set<String> mySet = new HashSet<String>(listeContacts);
+//                    listeSansDoublons = new ArrayList<String>(mySet);
+//                    Query query3 = db.collection(userID).whereIn(documentId(), listeSansDoublons);
+////                    Query query3 = db.collection(userID).whereIn(String.valueOf(db.document(userID)), listeSansDoublons);
                     Log.i(TAG, "onComplete: list sans doublons" + listeSansDoublons );
 // TODO: 07/07/2022 ici developper in adapteur normal pour afficher comme dans RecyclerAdapterToCours et ne pas faire appel a la BDD
 
