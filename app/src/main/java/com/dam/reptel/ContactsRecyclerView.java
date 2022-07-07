@@ -183,19 +183,23 @@ public class ContactsRecyclerView extends AppCompatActivity {
                     Log.i(TAG, "onComplete: " + listeContacts);
 
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        // Création du tableau avec le nb d'appels totals en fonction du numéro de KEY_CALLERSNUM
                         Map<String, Long> counts = listeContacts.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
                         Log.i(TAG, "compteOccurrences: " + counts);
+                        // Récupération du nombre d'appels
                         for(Long value : counts.values()){
                             Log.i(TAG, "Nb appels => " + value);
-                            // Le nombre total d'appels
-
                         }
+                        // Récupération d'une seule valeur de KEY_CALLERSNUM
                         for(String key: counts.keySet()){
                             Log.i(TAG, "Nb appels => " + key);
                             listeSansDoublons.add(key);
                         }
                     }
 
+//                    Query query3 = db.collection(userID)
+//                            .whereEqualTo()
+//
 
 //                    Set<String> mySet = new HashSet<String>(listeContacts);
 //                    listeSansDoublons = new ArrayList<String>(mySet);

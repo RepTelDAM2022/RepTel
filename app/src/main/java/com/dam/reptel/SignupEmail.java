@@ -130,6 +130,7 @@ public class SignupEmail extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
+                                    userID = firebaseAuth.getCurrentUser().getUid();
                                     Log.i(TAG, "onSuccess: userId = " + firebaseAuth.getCurrentUser().getUid());
                                 }
                             })
@@ -140,8 +141,6 @@ public class SignupEmail extends AppCompatActivity {
 
                                 }
                             });
-
-                    userID = firebaseAuth.getCurrentUser().getUid();
 
                     /**
                      *
