@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
-        android:backgroundTint="@color/background_tint"
+        android:backgroundTint="@color/black"
         android:text="@string/se_connecter"
         android:textColor="@color/button_text_color"
         android:textStyle="bold" />
@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
-        android:backgroundTint="@color/background_tint"
+        android:backgroundTint="@color/black"
         android:text="@string/s_enregistrer"
         android:textColor="@color/button_text_color"
         android:textStyle="bold" />

@@ -33,9 +33,9 @@
             android:name=".ContactsRecyclerView"
             android:theme="@style/FullScreenTheme"
             android:exported="false" />
-        <activity
-            android:name=".RecordsActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".RecordsActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".RecordsRecyclerView"
             android:exported="false" />

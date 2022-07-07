@@ -52,7 +52,7 @@
         android:id="@+id/btnAnnonce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/background_tint"
+        android:backgroundTint="@color/black"
         android:text="@string/annonce"
         android:textColor="@color/button_text_color"
         android:textStyle="bold" />
@@ -61,7 +61,7 @@
         android:id="@+id/btnMessages"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/background_tint"
+        android:backgroundTint="@color/black"
         android:text="@string/messages"
         android:textColor="@color/button_text_color"
         android:textStyle="bold" />

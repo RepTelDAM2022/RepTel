@@ -128,7 +128,7 @@ public class EnregistrementMessages extends AppCompatActivity {
                     recording = false;
                     num_Appelant = numAppelant.getText().toString();
                     enregistrerDansLaBDD();
-//                    verifierExistenceNumero(num_Appelant);
+                    verifierExistenceNumero(num_Appelant);
 //                    uploadAudiotoDB();
                 } else {
                     if (!numAppelant.getText().toString().equals("")) {
@@ -184,47 +184,15 @@ public class EnregistrementMessages extends AppCompatActivity {
 
         db.collection(userId)
                 .orderBy(KEY_CALLERSNUM)
-                .startAt(num_Appelant)
-                .endAt(num_Appelant + "\uf8ff")
-
-                //.whereEqualTo(KEY_CALLERSNUM, num_Appelant)
+                .whereEqualTo(KEY_CALLERSNUM, num_Appelant)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         Log.i(TAG, "onSuccess: ");
                     }
-                })
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.i(TAG, "onComplete: ");
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.i(TAG, "onComplete: " + "data num = " + document.get(KEY_CALLERSNUM) + " num appelant = " + num_Appelant);
-                                if (Objects.equals(document.get(KEY_CALLERSNUM), num_Appelant)) {
-                                    Log.i(TAG, "onComplete: appelant exist");
-                                } else {
-                                    Log.i(TAG, "onComplete: appelant n'existe pas");
-                                }
-                            }
-                        } else {
-                            Log.i(TAG, "onComplete: error getting document");
-                        }
-                    }
                 });
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.i(TAG, "onFailure: ");
-//                    }
-//                })
-//                .addOnCanceledListener(new OnCanceledListener() {
-//                    @Override
-//                    public void onCanceled() {
-//                        Log.i(TAG, "onCanceled: ");
-//                    }
-//                });
+
         Log.i(TAG, "verifierExistanceNumero: on sort de la methode verifier existance numero");
     }
 
@@ -236,39 +204,7 @@ public class EnregistrementMessages extends AppCompatActivity {
         String messageName = "M" + time + ".3gp";
         num_Appelant = numAppelant.getText().toString();
 
-//        Log.i(TAG, "My phone Number = " + myPhoneNumber);
-//        Log.i(TAG, "Num Tel appelant = " + numAppelant.getText().toString());
-//        Log.i(TAG, "Nom Appelant = " + nomContact);
-//        Log.i(TAG, "Lien message local = " + uriToParse);
-//        Log.i(TAG, "TimeStamp = " + time);
-//        Log.i(TAG, "Flag = " + flagLu);
-//        Log.i(TAG, "Nom appelant minuscule = " + nomContact.toLowerCase(Locale.ROOT));
-
         CollectionReference productsRef = FirebaseFirestore.getInstance().collection(userId);
-
-//       db.collection(userId)
-////               .whereEqualTo(KEY_CALLERSNUM, num_Appelant)
-//               .get()
-//               .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                   @Override
-//                   public void onSuccess (QuerySnapshot queryDocumentSnapshots) {
-//                           for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-//                               Log.i(TAG, "onComplete: " + "data num = " + document.get(KEY_CALLERSNUM) + " num appelant = " + num_Appelant);
-//                               if (Objects.equals(document.get(KEY_CALLERSNUM), num_Appelant)) {
-//                                   Log.i(TAG, "onComplete: appelant exist");
-//                               } else {
-//                                   Log.i(TAG, "onComplete: appelant n'existe pas");
-//                               }
-//                           }
-//                    }
-//               })
-//               .addOnFailureListener(new OnFailureListener() {
-//                   @Override
-//                   public void onFailure(@NonNull Exception e) {
-//                       Log.i(TAG, "onFailure: n'existe pas?");
-//                   }
-//               });
-
 
         // on prepare les donnees pour les envoyer dans la bdd
         Map<String, Object> datas = new HashMap<>();
@@ -286,14 +222,6 @@ public class EnregistrementMessages extends AppCompatActivity {
             datas.put(KEY_CALLERSNAMELOWERCASE, null);
         }
 
-//        Log.i(TAG, "My phone Number = " + myPhoneNumber);
-//        Log.i(TAG, "Num Tel appelant = " + numAppelant.getText().toString());
-//        Log.i(TAG, "Nom Appelant = " + nomAppelant);
-//        Log.i(TAG, "Lien message distant = " + urlStorageMessage);
-//        Log.i(TAG, "Lien message local = " + uriToParse);
-//        Log.i(TAG, "TimeStamp = " + time);
-//        Log.i(TAG, "Flag = " + flagLu);
-//        if (nomAppelant != null)  Log.i(TAG, "Nom appelant minuscule = " + nomAppelant.toLowerCase(Locale.ROOT));
 
         productsRef.add(datas)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

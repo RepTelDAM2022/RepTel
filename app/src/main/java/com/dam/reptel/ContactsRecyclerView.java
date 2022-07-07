@@ -21,14 +21,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import static com.dam.reptel.commons.NodesNames.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ContactsRecyclerView extends AppCompatActivity {
     private static final String TAG = "ContactsRecyclerView";
@@ -156,6 +160,8 @@ public class ContactsRecyclerView extends AppCompatActivity {
 //            }
 //        });
 
+
+
 //    btn_modifier.setOnClickListener(new View.OnClickListener() {
 //        @Override
 //        public void onClick(View v) {
@@ -234,7 +240,34 @@ public class ContactsRecyclerView extends AppCompatActivity {
 //                            }
 //                        }
 //                    });
-
+//            Log.i(TAG, "getDataFromFirestore: userId " + userID);
+//            Query query2 = db.collection(userID);
+//        query2.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                ArrayList<String> listeContacts=new ArrayList<>();
+//                if (task.isSuccessful()){
+//                    for (DocumentSnapshot documentSnapshot : task.getResult()){
+//                        Log.i(TAG, "onComplete: " + documentSnapshot.getString(KEY_CALLERSNUM));
+//                        listeContacts.add(documentSnapshot.getString(KEY_CALLERSNUM));
+//                    }
+//                    Log.i(TAG, "onComplete: " + listeContacts);
+//                    Set<String> mySet = new HashSet<String>(listeContacts);
+//                    ArrayList<String> listeSansDoublons = new ArrayList<String>(mySet);
+//                    Query query3 = db.collection(userID).whereIn(FieldPath.documentId(), listeSansDoublons);
+//                    Log.i(TAG, "onComplete: list sans doublons" + listeSansDoublons);
+//
+//                    FirestoreRecyclerOptions<ModelRecord> record = new FirestoreRecyclerOptions.Builder<ModelRecord>()
+//                            .setQuery(query3, ModelRecord.class)
+//                            .build();
+//
+//                    adapterContacts = new AdapterContacts(record);
+//                    rvContacts.setAdapter(adapterContacts);
+//                    adapterContacts.startListening();
+//                }
+//
+//            }
+//        });
 
 
         Query query = db.collection(userID).orderBy(KEY_TIMESTAMP, Query.Direction.DESCENDING);
@@ -259,16 +292,15 @@ public class ContactsRecyclerView extends AppCompatActivity {
         init();
         getDataFromFirestore();
 
-        adapterContacts.setOnItemClickListener(new AdapterContacts.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Log.i(TAG, "onItemClick: dans ContactsRecyclerView");
+//        adapterContacts.setOnItemClickListener(new AdapterContacts.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+//                Log.i(TAG, "onItemClick: dans ContactsRecyclerView");
 //                Intent intent = new Intent(context, RecordsRecyclerView.class);
 //                intent.putExtra("numTel", );
 //                context.startActivity(intent);
-
-            }
-        });
+//            }
+//        });
 
     }
 
