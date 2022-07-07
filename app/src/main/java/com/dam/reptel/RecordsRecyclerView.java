@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -114,21 +115,21 @@ public class RecordsRecyclerView extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_records);
+
         Intent intent = getIntent();
         numTel = intent.getStringExtra("numTel");
+        Log.i(TAG, "************: " + numTel);
 
         initUi();
         getRecordsDataFromFirestore();
 
         String nom = intent.getStringExtra("nomAppelant");
-        String tel = intent.getStringExtra("numTel");
-        photo = getDisplayPhoto(this, tel);
+        photo = getDisplayPhoto(this, numTel);
         if (nom!=null){
             tvNomContact.setText(nom);
         } else {
-            tvNomContact.setText(tel);
+            tvNomContact.setText(numTel);
         }
         // ajout des options pour afficher les photos des contacts.
         RequestOptions options = new RequestOptions()

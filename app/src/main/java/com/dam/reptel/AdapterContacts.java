@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.dam.reptel.commons.Util;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -66,7 +67,7 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
          * photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
          **/
 
-        Bitmap photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
+        Bitmap photo = Util.getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
 
         /** ici on rempli les donnees dans le RV **/
 
@@ -110,6 +111,7 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
                 Intent intent = new Intent(context, RecordsRecyclerView.class);
                 intent.putExtra("numTel", tel);
                 intent.putExtra("nomAppelant", nom);
+
                 context.startActivity(intent);
             }
         });
@@ -165,33 +167,5 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
 
     public void setOnItemClickListener(OnItemClickListener contactClickListener){
         this.contactClickListener = contactClickListener;
-    }
-
-    /** Methode pour retirer des contacts du telephone la photo d'un contact à partir de son numero de telephone. **/
-
-    public static Bitmap getDisplayPhoto(Context context, String contactNumber) {
-
-        contactNumber = Uri.encode(contactNumber);
-        int phoneContactID = -1;
-        Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, contactNumber),
-                new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID }, null, null, null);
-        while (contactLookupCursor.moveToNext()) {
-            phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
-        }
-        contactLookupCursor.close();
-
-        Bitmap photo = null;
-        if (phoneContactID != -1) {
-            Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, phoneContactID);
-            Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
-            try {
-                AssetFileDescriptor fd = context.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
-
-                photo = BitmapFactory.decodeFileDescriptor(fd.getFileDescriptor());
-            } catch (IOException e) {
-            }
-        }
-
-        return photo;
     }
 }

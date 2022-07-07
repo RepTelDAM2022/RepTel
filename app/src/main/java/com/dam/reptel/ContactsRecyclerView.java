@@ -57,12 +57,12 @@ public class ContactsRecyclerView extends AppCompatActivity {
     private ArrayList<ModelRecord> tableauRecords;
     private ModelRecord modelRecord;
     private ArrayList<String> listeSansDoublons;
+    private ArrayList<Long> nbreMessages;
 
     /** initialisation **/
     private void init(){
         rvContacts = findViewById(R.id.rvContacts);
         rvContacts.setHasFixedSize(true);
-//        rvContacts.setLayoutManager(new LinearLayoutManagerWrapper(this, LinearLayoutManager.VERTICAL, false));
         rvContacts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
 //        toolbar = findViewById(R.id.toolbar);
@@ -76,6 +76,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
         modelRecord = new ModelRecord();
 
         listeSansDoublons = new ArrayList<String>();
+        nbreMessages = new ArrayList<Long>();
 
         Log.i(TAG, "init: userId = " + userID);
     }
@@ -134,7 +135,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
     }
 
 
-        /** methode a mettre en place pour essayer de changer le flag dans la bdd apres la lecture du message **/
+        /** methode a mettre en place dans le AdapterRecords pour essayer de changer le flag dans la bdd apres la lecture du message **/
 //    btn_modifier.setOnClickListener(new View.OnClickListener() {
 //        @Override
 //        public void onClick(View v) {
@@ -168,7 +169,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
         private void getDataFromFirestore(){
 
         /** essai d'affichage sans doublons **/
-            Log.i(TAG, "getDataFromFirestore: userId " + userID);
+
             Query query2 = db.collection(userID);
         query2.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -176,19 +177,18 @@ public class ContactsRecyclerView extends AppCompatActivity {
                 ArrayList<String> listeContacts=new ArrayList<>();
                 if (task.isSuccessful()){
                     for (DocumentSnapshot documentSnapshot : task.getResult()){
-                        Log.i(TAG, "onComplete: " + documentSnapshot.getString(KEY_CALLERSNUM));
                         listeContacts.add(documentSnapshot.getString(KEY_CALLERSNUM));
                         // La meme chose mais avec le flag lu
                     }
-                    Log.i(TAG, "onComplete: " + listeContacts);
 
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                         // Création du tableau avec le nb d'appels totals en fonction du numéro de KEY_CALLERSNUM
-                        Map<String, Long> counts = listeContacts.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+                        Map<String, Long> counts = listeContacts.stream().collect(Collectors.groupingBy(s -> s, Collectors.counting()));
                         Log.i(TAG, "compteOccurrences: " + counts);
                         // Récupération du nombre d'appels
                         for(Long value : counts.values()){
                             Log.i(TAG, "Nb appels => " + value);
+                            nbreMessages.add(value);
                         }
                         // Récupération d'une seule valeur de KEY_CALLERSNUM
                         for(String key: counts.keySet()){
@@ -199,40 +199,23 @@ public class ContactsRecyclerView extends AppCompatActivity {
 
 //                    Query query3 = db.collection(userID)
 //                            .whereEqualTo()
-//
-
 //                    Set<String> mySet = new HashSet<String>(listeContacts);
 //                    listeSansDoublons = new ArrayList<String>(mySet);
 //                    Query query3 = db.collection(userID).whereIn(documentId(), listeSansDoublons);
 ////                    Query query3 = db.collection(userID).whereIn(String.valueOf(db.document(userID)), listeSansDoublons);
-                    Log.i(TAG, "onComplete: list sans doublons" + listeSansDoublons );
+
 // TODO: 07/07/2022 ici developper in adapteur normal pour afficher comme dans RecyclerAdapterToCours et ne pas faire appel a la BDD
 
-                    // Déclaration de l'adapter
-                    ContactsAdapter myContactsAdapter = new ContactsAdapter(ContactsRecyclerView.this, listeSansDoublons);
-                    // Ajout de l'adapteur au recyclerView
+                    ContactsAdapter myContactsAdapter = new ContactsAdapter(ContactsRecyclerView.this, listeSansDoublons, nbreMessages);
                     rvContacts.setAdapter(myContactsAdapter);
-                    // Ajout d'un nouveau LinearLayout pour contenir les vues du RecyclerView
-                    // On peut alors choisir l'orientation vertical ou horizontal ou inverser la sélection
                     LinearLayoutManager layoutManager = new LinearLayoutManager(ContactsRecyclerView.this,
                             LinearLayoutManager.VERTICAL, false);
                     rvContacts.setLayoutManager(layoutManager);
-
-
-
-//                    FirestoreRecyclerOptions<ModelRecord> record = new FirestoreRecyclerOptions.Builder<ModelRecord>()
-//                            .setQuery(query3, ModelRecord.class)
-//                            .build();
-//
-//                    adapterContacts = new AdapterContacts(record);
-//                    rvContacts.setAdapter(adapterContacts);
-//                    adapterContacts.startListening();
                 }
-
             }
         });
 
-        /** contacts avec doublons **/
+        /** affichage des contacts avec doublons **/
 //        Query query = db.collection(userID).orderBy(KEY_TIMESTAMP, Query.Direction.DESCENDING);
 //
 //        FirestoreRecyclerOptions<ModelRecord> record =
@@ -255,11 +238,11 @@ public class ContactsRecyclerView extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapterContacts.stopListening();
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        adapterContacts.stopListening();
+//    }
 
 //    @Override
 //    protected void onStart() {
