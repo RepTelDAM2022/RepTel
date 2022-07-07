@@ -127,12 +127,6 @@ public class SignupEmail extends AppCompatActivity {
                 // Si tout est bon on s'enregistre.
                 else {
                     firebaseAuth.createUserWithEmailAndPassword(email, motPasse)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    Log.i(TAG, "onComplete: task : " + task);
-                                }
-                            })
                             .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {

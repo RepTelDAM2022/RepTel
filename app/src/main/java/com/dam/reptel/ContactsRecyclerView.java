@@ -33,7 +33,9 @@ import static com.google.firebase.firestore.FieldPath.documentId;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * RecyclerView des contacts.
@@ -54,11 +56,12 @@ public class ContactsRecyclerView extends AppCompatActivity {
     private String ColKeyPhoneNumber;
     private ArrayList<ModelRecord> tableauRecords;
     private ModelRecord modelRecord;
+    private ArrayList<String> listeSansDoublons;
 
     /** initialisation **/
     private void init(){
         rvContacts = findViewById(R.id.rvContacts);
-        rvContacts.setHasFixedSize(true);   /** ?????? faut-il mettre ca???? la taille de la bdd peut changer a tout moment **/
+        rvContacts.setHasFixedSize(true);
 //        rvContacts.setLayoutManager(new LinearLayoutManagerWrapper(this, LinearLayoutManager.VERTICAL, false));
         rvContacts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
@@ -71,6 +74,8 @@ public class ContactsRecyclerView extends AppCompatActivity {
         userID = firebaseAuth.getCurrentUser().getUid();
         tableauRecords = new ArrayList<ModelRecord>();
         modelRecord = new ModelRecord();
+
+        listeSansDoublons = new ArrayList<String>();
 
         Log.i(TAG, "init: userId = " + userID);
     }
@@ -163,25 +168,43 @@ public class ContactsRecyclerView extends AppCompatActivity {
         private void getDataFromFirestore(){
 
         /** essai d'affichage sans doublons **/
-//            Log.i(TAG, "getDataFromFirestore: userId " + userID);
-//            Query query2 = db.collection(userID);
-//        query2.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                ArrayList<String> listeContacts=new ArrayList<>();
-//                if (task.isSuccessful()){
-//                    for (DocumentSnapshot documentSnapshot : task.getResult()){
-//                        Log.i(TAG, "onComplete: " + documentSnapshot.getString(KEY_CALLERSNUM));
-//                        listeContacts.add(documentSnapshot.getString(KEY_CALLERSNUM));
-//                    }
-//                    Log.i(TAG, "onComplete: " + listeContacts);
-//                    Set<String> mySet = new HashSet<String>(listeContacts);
-//                    ArrayList<String> listeSansDoublons = new ArrayList<String>(mySet);
-//                    Query query3 = db.collection(userID).whereIn(documentId(), listeSansDoublons);
-////                    Query query3 = db.collection(userID).whereIn(String.valueOf(db.document(userID)), listeSansDoublons);
-//                    Log.i(TAG, "onComplete: list sans doublons" + listeSansDoublons );
-//// TODO: 07/07/2022 ici developper in adapteur normal pour afficher comme dans RecyclerAdapterToCours et ne pas faire appel a la BDD
-//
+            Log.i(TAG, "getDataFromFirestore: userId " + userID);
+            Query query2 = db.collection(userID);
+        query2.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<String> listeContacts=new ArrayList<>();
+                if (task.isSuccessful()){
+                    for (DocumentSnapshot documentSnapshot : task.getResult()){
+                        Log.i(TAG, "onComplete: " + documentSnapshot.getString(KEY_CALLERSNUM));
+                        listeContacts.add(documentSnapshot.getString(KEY_CALLERSNUM));
+                    }
+                    Log.i(TAG, "onComplete: " + listeContacts);
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        Map<String, Long> counts = listeContacts.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+                        Log.i(TAG, "compteOccurrences: " + counts);
+                    }
+
+                    Set<String> mySet = new HashSet<String>(listeContacts);
+                    listeSansDoublons = new ArrayList<String>(mySet);
+                    Query query3 = db.collection(userID).whereIn(documentId(), listeSansDoublons);
+//                    Query query3 = db.collection(userID).whereIn(String.valueOf(db.document(userID)), listeSansDoublons);
+                    Log.i(TAG, "onComplete: list sans doublons" + listeSansDoublons );
+// TODO: 07/07/2022 ici developper in adapteur normal pour afficher comme dans RecyclerAdapterToCours et ne pas faire appel a la BDD
+
+                    // Déclaration de l'adapter
+                    ContactsAdapter myContactsAdapter = new ContactsAdapter(ContactsRecyclerView.this, listeSansDoublons);
+                    // Ajout de l'adapteur au recyclerView
+                    rvContacts.setAdapter(myContactsAdapter);
+                    // Ajout d'un nouveau LinearLayout pour contenir les vues du RecyclerView
+                    // On peut alors choisir l'orientation vertical ou horizontal ou inverser la sélection
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(ContactsRecyclerView.this,
+                            LinearLayoutManager.VERTICAL, false);
+                    rvContacts.setLayoutManager(layoutManager);
+
+
+
 //                    FirestoreRecyclerOptions<ModelRecord> record = new FirestoreRecyclerOptions.Builder<ModelRecord>()
 //                            .setQuery(query3, ModelRecord.class)
 //                            .build();
@@ -189,21 +212,21 @@ public class ContactsRecyclerView extends AppCompatActivity {
 //                    adapterContacts = new AdapterContacts(record);
 //                    rvContacts.setAdapter(adapterContacts);
 //                    adapterContacts.startListening();
-//                }
-//
-//            }
-//        });
+                }
+
+            }
+        });
 
         /** contacts avec doublons **/
-        Query query = db.collection(userID).orderBy(KEY_TIMESTAMP, Query.Direction.DESCENDING);
-
-        FirestoreRecyclerOptions<ModelRecord> record =
-                new FirestoreRecyclerOptions.Builder<ModelRecord>()
-                        .setQuery(query, ModelRecord.class)
-                        .build();
-
-        adapterContacts = new AdapterContacts(record);
-        rvContacts.setAdapter(adapterContacts);
+//        Query query = db.collection(userID).orderBy(KEY_TIMESTAMP, Query.Direction.DESCENDING);
+//
+//        FirestoreRecyclerOptions<ModelRecord> record =
+//                new FirestoreRecyclerOptions.Builder<ModelRecord>()
+//                        .setQuery(query, ModelRecord.class)
+//                        .build();
+//
+//        adapterContacts = new AdapterContacts(record);
+//        rvContacts.setAdapter(adapterContacts);
 
     }
 
@@ -223,15 +246,15 @@ public class ContactsRecyclerView extends AppCompatActivity {
         adapterContacts.stopListening();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(curentUser == null){
-            startActivity(new Intent(ContactsRecyclerView.this, SignupEmail.class));
-        } else {
-//            Log.i(TAG, "onStart: start listening");
-            adapterContacts.startListening();
-        }
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
+//        if(curentUser == null){
+//            startActivity(new Intent(ContactsRecyclerView.this, SignupEmail.class));
+//        } else {
+////            Log.i(TAG, "onStart: start listening");
+//            adapterContacts.startListening();
+//        }
+//    }
 }
