@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     public void btnLoginClick(View v) {
         email = et_email.getText().toString().trim();
         password = etMotPass.getText().toString().trim();
-
+        Log.i("TAG", "************************* btnLoginClick: ");
         /**
          * Vérification du remplissage des champs email et password
          * **/

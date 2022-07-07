@@ -25,4 +25,5 @@
     <string name="email">E-mail</string>
     <string name="erreurnom">Enter your first and last name</string>
     <string name="search">Search</string>
+    <string name="press_back_to_exit">Press back again to exit</string>
 </resources>

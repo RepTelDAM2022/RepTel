@@ -169,7 +169,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
         private void getDataFromFirestore(){
 
         /** essai d'affichage sans doublons **/
-
+            Log.i(TAG, "getDataFromFirestore: userId " + userID);
             Query query2 = db.collection(userID);
         query2.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -177,13 +177,15 @@ public class ContactsRecyclerView extends AppCompatActivity {
                 ArrayList<String> listeContacts=new ArrayList<>();
                 if (task.isSuccessful()){
                     for (DocumentSnapshot documentSnapshot : task.getResult()){
+                        Log.i(TAG, "onComplete: " + documentSnapshot.getString(KEY_CALLERSNUM));
                         listeContacts.add(documentSnapshot.getString(KEY_CALLERSNUM));
                         // La meme chose mais avec le flag lu
                     }
+                    Log.i(TAG, "onComplete: " + listeContacts);
 
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                         // Création du tableau avec le nb d'appels totals en fonction du numéro de KEY_CALLERSNUM
-                        Map<String, Long> counts = listeContacts.stream().collect(Collectors.groupingBy(s -> s, Collectors.counting()));
+                        Map<String, Long> counts = listeContacts.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
                         Log.i(TAG, "compteOccurrences: " + counts);
                         // Récupération du nombre d'appels
                         for(Long value : counts.values()){
@@ -197,8 +199,10 @@ public class ContactsRecyclerView extends AppCompatActivity {
                         }
                     }
 
-//                    Query query3 = db.collection(userID)
-//                            .whereEqualTo()
+                    Query query3 = db.collection(userID)
+                            .whereEqualTo(KEY_FLAG, true);
+
+
 //                    Set<String> mySet = new HashSet<String>(listeContacts);
 //                    listeSansDoublons = new ArrayList<String>(mySet);
 //                    Query query3 = db.collection(userID).whereIn(documentId(), listeSansDoublons);
@@ -211,11 +215,22 @@ public class ContactsRecyclerView extends AppCompatActivity {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(ContactsRecyclerView.this,
                             LinearLayoutManager.VERTICAL, false);
                     rvContacts.setLayoutManager(layoutManager);
+
+
+
+//                    FirestoreRecyclerOptions<ModelRecord> record = new FirestoreRecyclerOptions.Builder<ModelRecord>()
+//                            .setQuery(query3, ModelRecord.class)
+//                            .build();
+//
+//                    adapterContacts = new AdapterContacts(record);
+//                    rvContacts.setAdapter(adapterContacts);
+//                    adapterContacts.startListening();
                 }
+
             }
         });
 
-        /** affichage des contacts avec doublons **/
+        /** contacts avec doublons **/
 //        Query query = db.collection(userID).orderBy(KEY_TIMESTAMP, Query.Direction.DESCENDING);
 //
 //        FirestoreRecyclerOptions<ModelRecord> record =
@@ -238,21 +253,21 @@ public class ContactsRecyclerView extends AppCompatActivity {
 
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
+    @Override
+    protected void onStop() {
+        super.onStop();
 //        adapterContacts.stopListening();
-//    }
+    }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if(curentUser == null){
-//            startActivity(new Intent(ContactsRecyclerView.this, SignupEmail.class));
-//        } else {
-////            Log.i(TAG, "onStart: start listening");
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(curentUser == null){
+            startActivity(new Intent(ContactsRecyclerView.this, SignupEmail.class));
+        } else {
+//            Log.i(TAG, "onStart: start listening");
 //            adapterContacts.startListening();
-//        }
-//    }
+        }
+    }
 }
