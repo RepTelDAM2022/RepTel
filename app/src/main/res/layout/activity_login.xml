@@ -93,6 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:onClick="btnLoginClick"
                 android:text="@string/se_connecter"
                 android:textColor="@color/button_text_color"
                 android:textStyle="bold" />

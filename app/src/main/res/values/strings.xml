@@ -23,5 +23,6 @@
     <string name="jouer">PLAY</string>
     <string name="email">E-mail</string>
     <string name="erreurnom">Entrez vos prénom et nom</string>
-    <string name="search">Search</string>
+    <string name="search">Rechercher</string>
+    <string name="press_back_to_exit">Presser retour une seconde fois pour sortir</string>
 </resources>

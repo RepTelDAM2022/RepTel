@@ -197,9 +197,9 @@ public class ContactsRecyclerView extends AppCompatActivity {
                         }
                     }
 
-//                    Query query3 = db.collection(userID)
-//                            .whereEqualTo()
-//
+                    Query query3 = db.collection(userID)
+                            .whereEqualTo(KEY_FLAG, true);
+
 
 //                    Set<String> mySet = new HashSet<String>(listeContacts);
 //                    listeSansDoublons = new ArrayList<String>(mySet);
@@ -258,18 +258,18 @@ public class ContactsRecyclerView extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        adapterContacts.stopListening();
+//        adapterContacts.stopListening();
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if(curentUser == null){
-//            startActivity(new Intent(ContactsRecyclerView.this, SignupEmail.class));
-//        } else {
-////            Log.i(TAG, "onStart: start listening");
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(curentUser == null){
+            startActivity(new Intent(ContactsRecyclerView.this, SignupEmail.class));
+        } else {
+//            Log.i(TAG, "onStart: start listening");
 //            adapterContacts.startListening();
-//        }
-//    }
+        }
+    }
 }
