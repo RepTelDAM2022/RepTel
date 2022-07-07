@@ -26,7 +26,9 @@ import java.io.IOException;
 public class Annonce extends AppCompatActivity {
 
     private static final int REQUEST_AUDIO_PERMISSION_CODE = 1;
-    /** variables **/
+    /**
+     * variables
+     **/
 
     private Button btnREC, btnPLAY;
     private Boolean recording;
@@ -35,23 +37,22 @@ public class Annonce extends AppCompatActivity {
     private MediaPlayer mPlayer;
     private static String mFileName = null;
 
-    private void initUI(){
+    private void initUI() {
         btnREC = findViewById(R.id.btnREC);
         btnPLAY = findViewById(R.id.btnPLAY);
-        recording=false;
+        recording = false;
 
         /**
          * Creation du repertoire RepTel pour y mettre le fichier Annonce.3gp et plus tard les fichiers des messages.
-         * il faudra deplacer cette creation de repertoire d'ici a MainActivity pour creer ce repertoire dès le depart de l'application
-         * avec les demandes des permissions.
          *
-         * Je l'ai fait.
-         * Voir dans MainActivity onCreate();
-         * je le laisse ici pour paranoia check
+         * cette creation se fait dans MainActivity avec les demandes des permissions.
+         *
+         * Ici la Methode Annonce verifie que ce repertoire existe vraiment avant d'enregistrer
+         * paranoia check
          */
 
         File repTel = new File(Environment.getExternalStorageDirectory() + "/Reptel");
-        if (repTel.isDirectory()){
+        if (repTel.isDirectory()) {
             mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
             mFileName += "/RepTel/Annonce.3gp";
         } else {
@@ -77,12 +78,12 @@ public class Annonce extends AppCompatActivity {
         btnREC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (recording){
+                if (recording) {
                     mRecorder.stop();
                     mRecorder.release();
                     mRecorder = null;
                     btnREC.setText("REC");
-                    recording=false;
+                    recording = false;
                 } else {
                     startRecording();
                 }
@@ -97,18 +98,25 @@ public class Annonce extends AppCompatActivity {
 
     }
 
+    /**
+     * methode pour lire les fichiers audio
+     **/
     private void playAudio() {
         mPlayer = new MediaPlayer();
         try {
             mPlayer.setDataSource(mFileName);
-            mPlayer.prepare();;
+            mPlayer.prepare();
+            ;
             mPlayer.start();
         } catch (IOException e) {
             Log.e(TAG, "playAudio: failed");
         }
-
-
     }
+
+    /**
+     * methode pour enregistrer les fichiers audio
+     * mais d'abord on reverifie qu'on a les permissions requises.
+     **/
 
     private void startRecording() {
         if (CheckPermissions()) {
@@ -124,21 +132,24 @@ public class Annonce extends AppCompatActivity {
             }
             mRecorder.start();
             btnREC.setText("STOP");
-            recording=true;
+            recording = true;
         } else {
             RequestPermissions();
         }
     }
 
+    /** verification des permissions **/
     public boolean CheckPermissions() {
         int result = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int result1 = ContextCompat.checkSelfPermission(getApplicationContext(), RECORD_AUDIO);
         return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
     }
 
+    /** demande des permissions si on ne les a pas **/
     private void RequestPermissions() {
         ActivityCompat.requestPermissions(Annonce.this, new String[]{RECORD_AUDIO, WRITE_EXTERNAL_STORAGE}, REQUEST_AUDIO_PERMISSION_CODE);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -156,6 +167,6 @@ public class Annonce extends AppCompatActivity {
                 break;
         }
     }
- 
+
 
 }

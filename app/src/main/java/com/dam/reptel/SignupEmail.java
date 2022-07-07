@@ -36,6 +36,10 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * s'enregistrer dans la base de donnees avec un adresse email.
+ */
+
 public class SignupEmail extends AppCompatActivity {
 
     private static final String TAG = "SignupEmail";
@@ -85,17 +89,10 @@ public class SignupEmail extends AppCompatActivity {
 
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
-        //Log.i(TAG, "onCreate: firebase current user " + currentUser);
-
-//        /**
-//         * ici test ci le currentUser est null, on s'inscrit sinon on va vers l'ecran suivant.
-//         *
-//         */
-//
-//        if (currentUser != null) {
-//            Intent intent1 = new Intent(SignupEmail.this, Parametres.class);
-//            startActivity(intent1);
-//        }
+        /**
+         * saisie du clique sur le boutton s'enregistrer et verification des donnees
+         * avant enregistrement du nouvel utilisateur dans le BDD
+         */
 
         // Set onClickListener pour le bouton d'enregistrement
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
@@ -151,15 +148,10 @@ public class SignupEmail extends AppCompatActivity {
                             });
 
                     userID = firebaseAuth.getCurrentUser().getUid();
-                    //enregistrerDansLaBDD();
 
                     /**
                      *
-                     *
-                     * ici on continue vers les ecrans suivants
-                     *
-                     * il faudra creer la FireStore Collection et y mettre les infos comme
-                     * le nom et le num de tel
+                     * ici on continue vers l'ecran Parametres
                      *
                      * **/
 
@@ -170,41 +162,4 @@ public class SignupEmail extends AppCompatActivity {
             }
         });
     }
-
-
-//    private void enregistrerDansLaBDD() {
-//
-//        String myPhoneNumber = etNumTel.getText().toString().trim();
-//        long time = System.currentTimeMillis();
-//
-//        CollectionReference productsRef = FirebaseFirestore.getInstance().collection(userID);
-//
-//        // on prepare les donnees pour les envoyer dans la bdd
-//        Map<String, Object> datas = new HashMap<>();
-//        datas.put(KEY_MYNUM, myPhoneNumber);
-//        datas.put(KEY_CALLERSNUM, "00000000");
-//        datas.put(KEY_CALLERSNAME, "Nom Appelant");
-//        datas.put(KEY_MESSAGE, null);
-//        datas.put(KEY_MESSAGE_LOCAL, null);
-//        datas.put(KEY_TIMESTAMP, time);
-//        datas.put(KEY_FLAG, "false");
-//        datas.put(KEY_FIRSTMESSAGE, "true");
-//        datas.put(KEY_CALLERSNAMELOWERCASE, null);
-//
-//        productsRef.add(datas)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.i(TAG, "onSuccess: DocumentSnapshot added with ID = " + documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.i(TAG, "onFailure: error adding document to db " + e);
-//                    }
-//                });
-//    }
-//
-
 }

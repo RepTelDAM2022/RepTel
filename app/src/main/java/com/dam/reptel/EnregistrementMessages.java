@@ -49,6 +49,10 @@ import java.util.Objects;
 
 import static com.dam.reptel.commons.NodesNames.*;
 
+/**
+ * Enregistrement des messages en local pour contourner l'interdiction d'Android d'enregistrer une communication telephonique
+ */
+
 public class EnregistrementMessages extends AppCompatActivity {
 
     private static final String TAG = "EnregistrementMessages";
@@ -84,6 +88,10 @@ public class EnregistrementMessages extends AppCompatActivity {
 
     private StorageReference storageReference;
 
+    /**
+     * initialisation
+     */
+
     private void initUI() {
         btnREC = findViewById(R.id.btnEnrMes);
         numAppelant = findViewById(R.id.et_num_appelant);
@@ -117,6 +125,10 @@ public class EnregistrementMessages extends AppCompatActivity {
 
         initUI();
 
+        /**
+         * enregistrement du message en local
+         */
+
         btnREC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +156,10 @@ public class EnregistrementMessages extends AppCompatActivity {
         });
     }
 
+    /**
+     * telechargement du message local en base de donnees.
+     * possible bloccage par google de cette action
+     */
     private void uploadAudiotoDB() {
         String messageFileName = "M" + time + ".3gp";
         StorageReference filepath = storageReference.child("Messages").child(messageFileName);
@@ -177,6 +193,15 @@ public class EnregistrementMessages extends AppCompatActivity {
 
     }
 
+    /**
+     * methode de verification de la pre-exsistence du numero dans la base de donnees.
+     * ne marche pas pour l'instant
+     * pour qu'elle marche, il faut reprendre la methode de ContactRecyclerView d'unification des doublons
+     * et tester si le numero existe dans le fichier resultat
+     * cette methode sera inutile si nous mettons en place l'iunification des doublons qui n'est pas encore optimisée.
+     *
+     * @param n
+     */
     private void verifierExistenceNumero(String n) {
 
         num_Appelant = n;
@@ -193,9 +218,12 @@ public class EnregistrementMessages extends AppCompatActivity {
                     }
                 });
 
-        Log.i(TAG, "verifierExistanceNumero: on sort de la methode verifier existance numero");
+        Log.i(TAG, "verifierExistenceNumero: on sort de la methode verifier existence numero");
     }
 
+    /**
+     * enregistrement dans la base de donnees.
+     */
     private void enregistrerDansLaBDD() {
 
         String myPhoneNumber = myNumTel;
@@ -238,6 +266,9 @@ public class EnregistrementMessages extends AppCompatActivity {
                 });
     }
 
+    /**
+     * enregistrement du message vocal en local
+     */
     private void startRecording() {
 
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE);
@@ -265,6 +296,10 @@ public class EnregistrementMessages extends AppCompatActivity {
         }
     }
 
+    /**
+     * verification et demande des permissions requises
+     * @return
+     */
     public boolean CheckPermissions() {
         int result = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int result1 = ContextCompat.checkSelfPermission(getApplicationContext(), RECORD_AUDIO);
@@ -293,6 +328,12 @@ public class EnregistrementMessages extends AppCompatActivity {
         }
     }
 
+    /**
+     * sortie du nom de la base contacts dans le telephone a partir du numero
+     * @param context
+     * @param phoneNumber
+     * @return
+     */
     public static String getContactNameByPhoneNumber(Context context, String phoneNumber) {
         ContentResolver cr = context.getContentResolver();
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));

@@ -44,11 +44,10 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
     }
 
     /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
      *
-     * @param options
-     */
+     * Creation d'un RecyclerViewAdapter pour afficher les contacts qui ont laissé un message
+     *
+     **/
 
     public AdapterContacts(@NonNull FirestoreRecyclerOptions<ModelRecord> options) {
         super(options);
@@ -62,6 +61,10 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
         String tel = model.getNumTeldelAppelant();
 
         long timestamp = model.getTimeStamp();
+
+        /** recherche de la photo du contact dans les contacts a partir du numero de tel
+         * photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
+         **/
 
         Bitmap photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
 
@@ -77,10 +80,9 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
 
         contactsViewHolder.tv_timestamp.setText(newDate);
 
-        // recherche de la photo du contact dans les contacts a partir du numero de tel
-        // photo = getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), tel);
 
-        // ajout des options pour afficher les photos des contacts.
+        /** ajout des options pour afficher les photos des contacts.**/
+
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .circleCrop()
@@ -104,11 +106,6 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
         contactsViewHolder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                Intent intent1 = new Intent(context, RecordsActivity.class);
-//                intent1.putExtra("numTel", tel);
-//                intent1.putExtra("nomAppelant", nom);
-//                context.startActivity(intent1);
 
                 Intent intent = new Intent(context, RecordsRecyclerView.class);
                 intent.putExtra("numTel", tel);
@@ -169,6 +166,8 @@ public class AdapterContacts extends FirestoreRecyclerAdapter<ModelRecord, Adapt
     public void setOnItemClickListener(OnItemClickListener contactClickListener){
         this.contactClickListener = contactClickListener;
     }
+
+    /** Methode pour retirer des contacts du telephone la photo d'un contact à partir de son numero de telephone. **/
 
     public static Bitmap getDisplayPhoto(Context context, String contactNumber) {
 

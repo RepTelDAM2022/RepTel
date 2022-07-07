@@ -22,6 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 
+/**
+ * Main Activity
+ * Ecran d'accueil de l'application avec direction vers Signup ou Signin
+ */
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
@@ -110,22 +115,19 @@ public class MainActivity extends AppCompatActivity {
          */
         FirebaseUser currentUser = null;
         String currentUid = firebaseAuth.getUid();
-        currentUser= firebaseAuth.getCurrentUser(); //TODO : Attention le UserId est conservé en local sur le smartphone; refaire un signUp ou un onDestroy
+        currentUser= firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             Log.i(TAG, "onCreate(), current user = " + currentUser);
             Log.i(TAG, "onCreate(), current user Id = " + currentUid);
 
-            /** MODIFIE POUR LE TEST A REMETTRE EN MARCHE CETTE LIGNE **/
             Intent intent1 = new Intent(MainActivity.this, Parametres.class);
-            /** MODIFIE POUR LE TEST A REMETTRE EN MARCHE CETTE LIGNE **/
-
-            /** cette ligne mise en marche pour le test il faudra la supprimer apres **/
-            //Intent intent1 = new Intent(MainActivity.this, EnregistrementMessages.class);
-            /** cette ligne mise en marche pour le test il faudra la supprimer apres **/
             startActivity(intent1);
         }
 
 
+        /**
+        * setOnClickListener s'enregistrer
+        */
 
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +138,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        /**
+        * setOnClickListener se connecter
+        */
 
         btnSeConnecter.setOnClickListener(new View.OnClickListener() {
             @Override

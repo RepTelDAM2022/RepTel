@@ -1,5 +1,8 @@
 package com.dam.reptel;
 
+import static com.dam.reptel.commons.NodesNames.KEY_CALLERSNUM;
+import static com.dam.reptel.commons.NodesNames.KEY_TIMESTAMP;
+
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +13,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,10 +30,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import static com.dam.reptel.commons.NodesNames.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
+
+/**
+ * Affichage des messages laisses par un appelant
+ * RecyclerView des contacts
+ */
 
 public class RecordsRecyclerView extends AppCompatActivity {
     private static final String TAG = "RecordsRecyclerView";
@@ -57,6 +61,10 @@ public class RecordsRecyclerView extends AppCompatActivity {
     TextView tvNomContact;
     ImageView ivPhotoContact;
 
+    /**
+     * initialisation
+     */
+
     private void initUi(){
         tvNomContact = findViewById(R.id.tvNomContact);
         ivPhotoContact = findViewById(R.id.ivPhotoContact);
@@ -73,6 +81,9 @@ public class RecordsRecyclerView extends AppCompatActivity {
         modelRecord = new ModelRecord();
     }
 
+    /**
+     * retrait des informations de la base de donnees et envoie de ces info à l'Adapter
+     */
     private void getRecordsDataFromFirestore(){
 
         Query query = db.collection(userID)
@@ -89,6 +100,16 @@ public class RecordsRecyclerView extends AppCompatActivity {
         rvRecords.setAdapter(adapterRecords);
     }
 
+    /**
+     * on Create
+     * appel aux methodes
+     * initialisation
+     * envoie des donnees à l'Adapter
+     *
+     * affichage du nom et de la photo de l'appelant en haut de l'ecran
+     *
+     * @param savedInstanceState
+     */
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,6 +164,14 @@ public class RecordsRecyclerView extends AppCompatActivity {
             adapterRecords.startListening();
         }
     }
+
+    /**
+     * methode pour retirer des contacts du telephone la photo du contact s'il existe.
+     * @param context
+     * @param contactNumber
+     * @return
+     */
+
     public static Bitmap getDisplayPhoto(Context context, String contactNumber) {
 
         contactNumber = Uri.encode(contactNumber);

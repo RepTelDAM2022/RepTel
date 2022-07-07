@@ -4,6 +4,10 @@ import android.graphics.Bitmap;
 
 import java.sql.Timestamp;
 
+/**
+ * Model de l'enregistrement dans la base de donnees
+ */
+
 public class ModelRecord {
 
     private String RegisteredUserPhoneNumber;

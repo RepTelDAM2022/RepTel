@@ -24,6 +24,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * verification du numero de telephone par l'OTP
+ * methode desuete, la verification se fait directement dans la page de creation de l'utilisateur dans SignupActivity
+ */
+
 public class VerificationNumTel extends AppCompatActivity {
 
     private static final String TAG = "VerificationNumTel";

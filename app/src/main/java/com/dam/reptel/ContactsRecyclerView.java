@@ -35,6 +35,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * RecyclerView des contacts.
+ */
+
 public class ContactsRecyclerView extends AppCompatActivity {
     private static final String TAG = "ContactsRecyclerView";
 
@@ -125,7 +129,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
     }
 
 
-        /** methode pour essayer de chabger le flag dans la bdd apres la lecture du message **/
+        /** methode a mettre en place pour essayer de changer le flag dans la bdd apres la lecture du message **/
 //    btn_modifier.setOnClickListener(new View.OnClickListener() {
 //        @Override
 //        public void onClick(View v) {

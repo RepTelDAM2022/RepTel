@@ -20,6 +20,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Login pour se reconnecter a la BDD avec l'email et le mot de passe
+ */
+
 public class LoginActivity extends AppCompatActivity {
 
     /** variables globales **/
@@ -27,6 +31,9 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText et_email, etMotPass;
     private String email, password;
 
+    /**
+     * initialisation
+     */
     public void initUI(){
         et_email = findViewById(R.id.et_email);
         etMotPass = findViewById(R.id.etMotPass);
@@ -42,11 +49,18 @@ public class LoginActivity extends AppCompatActivity {
         etMotPass.setOnEditorActionListener(editorActionListener);
     }
 
+    /**
+     * gestion du boutton Login
+     * @param v
+     */
     public void btnLoginClick(View v) {
         email = et_email.getText().toString().trim();
         password = etMotPass.getText().toString().trim();
 
-        // Vérification du remplissage des champs email et password
+        /**
+         * Vérification du remplissage des champs email et password
+         * **/
+
         if (email.equals("")) {
             et_email.setError("Entrez votre Email");
         } else if (password.equals("")) {
@@ -86,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    /** 12 Ajout des boutons next et send à la place du retour chariot du keyboard **/
+    /**  Ajout des boutons next et send à la place du retour chariot du keyboard **/
     private TextView.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

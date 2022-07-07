@@ -10,9 +10,16 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * ecran parametres pour gerer les directions de l'application:
+ *
+ */
 public class Parametres extends AppCompatActivity {
     private static final String TAG = "Parametres";
 
+    /**
+     * variables globales
+     */
     private Button btnAnnonce, btnMessages, btnSimuler, btnSignout;
     String numTel;
 
@@ -33,6 +40,9 @@ public class Parametres extends AppCompatActivity {
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
+        /**
+         * direction Annonce pour entregistrer l'annonce
+         */
 
         btnAnnonce.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +52,10 @@ public class Parametres extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        /**
+         * direction Messages recus pour afficher le premier RV des contacts ayant laissé un message.
+         */
 
         btnMessages.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +69,11 @@ public class Parametres extends AppCompatActivity {
             }
         });
 
+        /**
+         * direction Simulation des messages dans la mesure ou Google nous interdit d'enregistrer des appels et donc
+         * d'avoir de vrais messages.
+         */
+
         btnSimuler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +83,10 @@ public class Parametres extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        /**
+         * direction Signout pour se deconnecter de l'application.
+         */
 
         btnSignout.setOnClickListener(new View.OnClickListener() {
             @Override

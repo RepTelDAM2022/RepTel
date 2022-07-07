@@ -26,6 +26,11 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * s'enregistrer dans la base FirebaseAuth avec le numero de telephone
+ * avec verification pas OTP.
+ *
+ */
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -79,20 +84,18 @@ public class SignupActivity extends AppCompatActivity {
         /**
          * ici test ci le currentUser est null, on s'inscrit sinon on va vers l'ecran suivant.
          *
-         * ici pour le test, j'ai mis en commentaires ce if donc on va directement vers l'ecran suivant.
-         *
-         * pour faire marcher le programme, il faut remettre ce if en marche.
          */
-
-
 
         if (currentUser != null) {
             Intent intent1 = new Intent(SignupActivity.this, Parametres.class);
             startActivity(intent1);
-
         }
 
-        // Set OnClickListener pour le boutton s'enregistrer
+
+        /**
+         * Saisie du clique sur le bouton s'enregistrer et debut des verifications
+         */
+// Set OnClickListener pour le boutton s'enregistrer
         btnSenregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +103,9 @@ public class SignupActivity extends AppCompatActivity {
                 numTel = etNumTel.getText().toString().trim();
                 motPasse = etMotPass.getText().toString().trim();
                 confMotPass = etConfMotPass.getText().toString().trim();
-
+/**
+ * verification si les cases sont remplies
+ */
                 //verifications si les cases ne sont pas vides
                 if (nom.equals("")) {
                     etPrenomNom.setError("Entrez vos prénom et nom");
@@ -143,6 +148,10 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * creation du user avec son numero de tel
+     * @param credential
+     */
      private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -154,12 +163,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
                             /**
-                             *
-                             *
                              * ici on continue vers les ecrans suivants
-                             *
-                             * il faudra creer la FireStore Collection et y mettre les infos comme
-                             * le nom et le num de tel
                              *
                              * **/
 
@@ -191,6 +195,10 @@ public class SignupActivity extends AppCompatActivity {
               mVerificationId = verificationId;
         }
 
+        /**
+         * verification par OTP
+         * @param phoneAuthCredential
+         */
         @Override
         public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
             // below line is used for getting OTP code
