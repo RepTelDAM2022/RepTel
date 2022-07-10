@@ -1,5 +1,7 @@
 package com.dam.reptel;
 
+import static com.dam.reptel.commons.NodesNames.KEY_FLAG;
+
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.ColorInt;
@@ -23,16 +26,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.dam.reptel.commons.NodesNames.*;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, AdapterRecords.RecordsViewHolder> {
 
     private static final String TAG = "AdapterRecords";
+
+    /** declaration de la bdd **/
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore db;
+    private String userId;
+    private String documentReference;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -44,15 +63,16 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
         super(options);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onBindViewHolder(@NonNull AdapterRecords.RecordsViewHolder recordsViewHolder, int position, @NonNull ModelRecord model) {
-
 
         /** #On utilise le model pour récupérer les données qui nous intéresse **/
         String nom = model.getNomdelAppelant();
         String numAppelant = model.getNumTeldelAppelant();
         long timestamp = model.getTimeStamp();
         String mFile = model.getLienMessageLocal();
+        boolean flaglu = model.flag;
 
         /** #On associe les données récupérées avec le holder de vue **/
 
@@ -61,6 +81,13 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
         String newDate = sdf.format(resultDate);
 
         recordsViewHolder.tvRecordDate.setText(newDate);
+
+        /** test si flag lu on met le background a blanc **/
+        if (flaglu){
+            recordsViewHolder.ll_record.setBackgroundResource(R.drawable.cardview_back_white);
+            recordsViewHolder.ivPlay.setImageResource(com.dam.reptel.R.drawable.ic_play_black_24);
+            recordsViewHolder.tvRecordDate.setTextColor(R.color.black);
+        }
 
         /** programmer le click sur un message **/
 
@@ -73,6 +100,20 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
                 recordsViewHolder.ll_record.setBackgroundResource(R.drawable.cardview_back_white);
                 recordsViewHolder.ivPlay.setImageResource(com.dam.reptel.R.drawable.ic_play_black_24);
                 recordsViewHolder.tvRecordDate.setTextColor(R.color.black);
+
+// TODO: 10/07/2022 ici programmer la mise du flag a true (tester s'il est a false) quand on lit le message.
+                /** initialisation de la bdd **/
+                Log.i(TAG, "AdapterRecords.RecordsViewHolder: initialisation de la bdd");
+                firebaseAuth = FirebaseAuth.getInstance();
+                userId = firebaseAuth.getCurrentUser().getUid();
+                db = FirebaseFirestore.getInstance();
+//                documentReference = db.collection(userId).document().getId();
+                Log.i(TAG, "****** userID = " + userId + "\n db = " + db + "\n docRef = " + documentReference);
+
+
+                /**
+                * methode pour mettre le flag a true une fois le message lu
+                */
 
             }
         });
@@ -88,7 +129,6 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
         return new RecordsViewHolder(view);
         //return null;
     }
-
 
     /**
      * Class FilmsViewHolder
@@ -114,8 +154,6 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
                     if (position != RecyclerView.NO_POSITION && recordClickListener != null) {
                         DocumentSnapshot recordSnapshot = getSnapshots().getSnapshot(position);
                         recordClickListener.onItemClick(recordSnapshot, position);
-//                        int red = Color.parseColor("#FF0000");
-//                        mainLayout.setBackgroundColor(red);
                     }
                 }
             });
@@ -135,21 +173,15 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
         this.recordClickListener = recordClickListener;
     }
 
-
     private void playAudio(String mFile) {
         MediaPlayer mPlayer;
         mPlayer = new MediaPlayer();
         try {
             mPlayer.setDataSource(mFile);
             mPlayer.prepare();
-            ;
             mPlayer.start();
         } catch (IOException e) {
             Log.e(TAG, "playAudio: failed");
         }
-
-
     }
-
-
 }

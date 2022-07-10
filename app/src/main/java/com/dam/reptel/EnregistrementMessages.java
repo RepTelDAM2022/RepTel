@@ -77,16 +77,18 @@ public class EnregistrementMessages extends AppCompatActivity {
     private long time;
     private boolean flagLu;
     private boolean firstMessage;
+    private String myNumTel;
+    private String num_Appelant;
+
+    /** declaration de la bdd **/
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
     private String userId;
-    private String myNumTel;
-    private String num_Appelant;
+    private StorageReference storageReference;
 
     private MediaRecorder mRecorder;
     private static String mFileName = null;
 
-    private StorageReference storageReference;
 
     /**
      * initialisation
@@ -104,6 +106,7 @@ public class EnregistrementMessages extends AppCompatActivity {
             repTelDirectory.mkdirs();
         }
 
+        /** initialisation de la bdd **/
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
@@ -140,7 +143,7 @@ public class EnregistrementMessages extends AppCompatActivity {
                     recording = false;
                     num_Appelant = numAppelant.getText().toString();
                     enregistrerDansLaBDD();
-                    verifierExistenceNumero(num_Appelant);
+//                    verifierExistenceNumero(num_Appelant);
 //                    uploadAudiotoDB();
                 } else {
                     if (!numAppelant.getText().toString().equals("")) {
@@ -249,7 +252,6 @@ public class EnregistrementMessages extends AppCompatActivity {
         } else {
             datas.put(KEY_CALLERSNAMELOWERCASE, null);
         }
-
 
         productsRef.add(datas)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

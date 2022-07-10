@@ -131,40 +131,7 @@ public class ContactsRecyclerView extends AppCompatActivity {
         adapterContacts = new AdapterContacts(searchContact);
         rvContacts.setAdapter(adapterContacts);
         adapterContacts.startListening();
-
     }
-
-
-        /** methode a mettre en place dans le AdapterRecords pour essayer de changer le flag dans la bdd apres la lecture du message **/
-//    btn_modifier.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            Log.i(TAG, "onClick: "+tv_auteur_livre.getText().toString());
-//
-//            int nombredespages = Integer.parseInt(tv_nombres_pages_livres.getText().toString());
-//            Log.i(TAG, "nombredespages: "+nombredespages);
-//            if (tv_title_livre.getText().toString().equals("")) {
-//                Toast.makeText(ModifierLivreBD.this, "Veuillez saisir un titre.", Toast.LENGTH_LONG).show();
-//            }
-//            livresRef.document(id_BD).update(
-//                    "title_livre", tv_title_livre.getText().toString(),
-//                    "auteur_livre",tv_auteur_livre.getText().toString(),
-//                    "editeur_livre",tv_editeur_livre.getText().toString(),
-//                    "date_parution_livre",tv_parution_livre.getText().toString(),
-//                    "resume_livre",tv_resume_livre.getText().toString(),
-//                    "isbn_livre",tv_isbn_livre.getText().toString(),
-//                    "nombre_livres",nombredespages,
-//                    "url_cover_livre",uriPhoto
-//
-//            );
-//
-//            Toast.makeText(ModifierLivreBD.this, "Mise à jour effectuée avec succès.", Toast.LENGTH_LONG).show();
-//
-//        }
-//    });
-
-
-
 
         private void getDataFromFirestore(){
 
@@ -198,49 +165,14 @@ public class ContactsRecyclerView extends AppCompatActivity {
                             listeSansDoublons.add(key);
                         }
                     }
-
-                    Query query3 = db.collection(userID)
-                            .whereEqualTo(KEY_FLAG, true);
-
-
-//                    Set<String> mySet = new HashSet<String>(listeContacts);
-//                    listeSansDoublons = new ArrayList<String>(mySet);
-//                    Query query3 = db.collection(userID).whereIn(documentId(), listeSansDoublons);
-////                    Query query3 = db.collection(userID).whereIn(String.valueOf(db.document(userID)), listeSansDoublons);
-
-// TODO: 07/07/2022 ici developper in adapteur normal pour afficher comme dans RecyclerAdapterToCours et ne pas faire appel a la BDD
-
                     ContactsAdapter myContactsAdapter = new ContactsAdapter(ContactsRecyclerView.this, listeSansDoublons, nbreMessages);
                     rvContacts.setAdapter(myContactsAdapter);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(ContactsRecyclerView.this,
                             LinearLayoutManager.VERTICAL, false);
                     rvContacts.setLayoutManager(layoutManager);
-
-
-
-//                    FirestoreRecyclerOptions<ModelRecord> record = new FirestoreRecyclerOptions.Builder<ModelRecord>()
-//                            .setQuery(query3, ModelRecord.class)
-//                            .build();
-//
-//                    adapterContacts = new AdapterContacts(record);
-//                    rvContacts.setAdapter(adapterContacts);
-//                    adapterContacts.startListening();
                 }
-
             }
         });
-
-        /** contacts avec doublons **/
-//        Query query = db.collection(userID).orderBy(KEY_TIMESTAMP, Query.Direction.DESCENDING);
-//
-//        FirestoreRecyclerOptions<ModelRecord> record =
-//                new FirestoreRecyclerOptions.Builder<ModelRecord>()
-//                        .setQuery(query, ModelRecord.class)
-//                        .build();
-//
-//        adapterContacts = new AdapterContacts(record);
-//        rvContacts.setAdapter(adapterContacts);
-
     }
 
     @Override
@@ -256,7 +188,6 @@ public class ContactsRecyclerView extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-//        adapterContacts.stopListening();
     }
 
     @Override
@@ -265,9 +196,6 @@ public class ContactsRecyclerView extends AppCompatActivity {
         FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(curentUser == null){
             startActivity(new Intent(ContactsRecyclerView.this, SignupEmail.class));
-        } else {
-//            Log.i(TAG, "onStart: start listening");
-//            adapterContacts.startListening();
         }
     }
 }

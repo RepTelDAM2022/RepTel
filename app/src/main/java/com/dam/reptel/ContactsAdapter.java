@@ -97,7 +97,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
         /** fin du remplissage des donnees dans le RV **/
 
-        Log.i(TAG, "ContactsAdapter.onBindViewHolder: **********" + numTel);
+//        Log.i(TAG, "ContactsAdapter.onBindViewHolder: **********" + numTel);
 
         /** programmer le click sur un contact **/
 
@@ -105,8 +105,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             @Override
             public void onClick(View v) {
                 int position = contactsViewHolder.getBindingAdapterPosition();
-                Log.i(TAG, "position ******: " + position);
-                    Log.i("TAG", "ContactsAdapter.onClick ******* " + listeSansDoublons.get(position));
+//                Log.i(TAG, "position ******: " + position);
+//                    Log.i("TAG", "ContactsAdapter.onClick ******* " + listeSansDoublons.get(position));
                     Intent intent = new Intent(context, RecordsRecyclerView.class);
                     intent.putExtra("numTel", listeSansDoublons.get(position));
                     context.startActivity(intent);

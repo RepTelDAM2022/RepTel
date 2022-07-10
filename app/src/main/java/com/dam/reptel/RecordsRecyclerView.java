@@ -120,7 +120,7 @@ public class RecordsRecyclerView extends AppCompatActivity {
 
         Intent intent = getIntent();
         numTel = intent.getStringExtra("numTel");
-        Log.i(TAG, "************: " + numTel);
+//        Log.i(TAG, "************: " + numTel);
 
         initUi();
         getRecordsDataFromFirestore();
