@@ -63,7 +63,6 @@
             android:layout_height="50dp"
             android:layout_gravity="right|center_vertical|end"
             android:layout_weight="0"
-            android:text="2"
             app:cornerRadius="35dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

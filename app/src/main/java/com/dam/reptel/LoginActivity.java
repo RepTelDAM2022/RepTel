@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         } else if (password.equals("")) {
             etMotPass.setError("Entrez votre mot de passe");
         } else {
-            // 9 Ajout de la vérification de la connection internet
+            // Ajout de la vérification de la connection internet
             if (Util.connectionAvailable(this)) {
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 firebaseAuth.signInWithEmailAndPassword(email, password)

@@ -70,7 +70,7 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
             public void onClick(View v) {
                 String mFile = model.getLienMessageLocal();
                 playAudio(mFile);
-                recordsViewHolder.ll_record.setBackgroundColor(R.color.white);
+                recordsViewHolder.ll_record.setBackgroundResource(R.drawable.cardview_back_white);
                 recordsViewHolder.ivPlay.setImageResource(com.dam.reptel.R.drawable.ic_play_black_24);
                 recordsViewHolder.tvRecordDate.setTextColor(R.color.black);
 

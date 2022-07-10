@@ -52,7 +52,6 @@
         android:id="@+id/btnAnnonce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:backgroundTint="@color/black"
         android:text="@string/annonce"
         android:textColor="@color/button_text_color"
@@ -62,7 +61,6 @@
         android:id="@+id/btnMessages"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:backgroundTint="@color/black"
         android:text="@string/messages"
         android:textColor="@color/button_text_color"
@@ -72,7 +70,6 @@
         android:id="@+id/btn_simuler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="simuler des messages"
         android:textColor="@color/button_text_color"
         android:textStyle="bold" />
@@ -81,7 +78,6 @@
         android:id="@+id/btn_signout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Signout"
         android:textColor="@color/button_text_color"
         android:textStyle="bold" />

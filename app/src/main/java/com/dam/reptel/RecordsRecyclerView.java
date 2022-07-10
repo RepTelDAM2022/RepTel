@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.dam.reptel.commons.Util;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -124,8 +125,8 @@ public class RecordsRecyclerView extends AppCompatActivity {
         initUi();
         getRecordsDataFromFirestore();
 
-        String nom = intent.getStringExtra("nomAppelant");
-        photo = getDisplayPhoto(this, numTel);
+        String nom = Util.getContactNameByPhoneNumber(this, numTel);
+        photo = Util.getDisplayPhoto(this, numTel);
         if (nom!=null){
             tvNomContact.setText(nom);
         } else {
@@ -166,36 +167,4 @@ public class RecordsRecyclerView extends AppCompatActivity {
         }
     }
 
-    /**
-     * methode pour retirer des contacts du telephone la photo du contact s'il existe.
-     * @param context
-     * @param contactNumber
-     * @return
-     */
-
-    public static Bitmap getDisplayPhoto(Context context, String contactNumber) {
-
-        contactNumber = Uri.encode(contactNumber);
-        int phoneContactID = -1;
-        Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, contactNumber),
-                new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID }, null, null, null);
-        while (contactLookupCursor.moveToNext()) {
-            phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
-        }
-        contactLookupCursor.close();
-
-        Bitmap photo = null;
-        if (phoneContactID != -1) {
-            Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, phoneContactID);
-            Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
-            try {
-                AssetFileDescriptor fd = context.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
-
-                photo = BitmapFactory.decodeFileDescriptor(fd.getFileDescriptor());
-            } catch (IOException e) {
-            }
-        }
-
-        return photo;
-    }
 }

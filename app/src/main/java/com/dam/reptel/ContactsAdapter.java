@@ -1,5 +1,7 @@
 package com.dam.reptel;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -79,11 +81,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
-                .circleCrop()
                 .error(R.drawable.ic_contacts_24)
+                .circleCrop()
                 .placeholder(R.drawable.ic_contacts_24);
 
-        Context context = contactsViewHolder.iv_contactpicture.getContext();
+//        Context context = contactsViewHolder.iv_contactpicture.getContext();
         Glide.with(context)
                 .load(photo)
                 .apply(options)
@@ -95,15 +97,18 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
         /** fin du remplissage des donnees dans le RV **/
 
+        Log.i(TAG, "ContactsAdapter.onBindViewHolder: **********" + numTel);
+
         /** programmer le click sur un contact **/
 
         contactsViewHolder.mainLayout2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                int position = getBindingAdapterPosition();
-                    Log.i("TAG", "******* " + numTel);
+                int position = contactsViewHolder.getBindingAdapterPosition();
+                Log.i(TAG, "position ******: " + position);
+                    Log.i("TAG", "ContactsAdapter.onClick ******* " + listeSansDoublons.get(position));
                     Intent intent = new Intent(context, RecordsRecyclerView.class);
-                    intent.putExtra("numTel", numTel);
+                    intent.putExtra("numTel", listeSansDoublons.get(position));
                     context.startActivity(intent);
             }
         });
