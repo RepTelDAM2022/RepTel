@@ -57,7 +57,9 @@ public class ContactsRecyclerView extends AppCompatActivity {
     private ArrayList<ModelRecord> tableauRecords;
     private ModelRecord modelRecord;
     private ArrayList<String> listeSansDoublons;
+    private ArrayList<String> listeSansDoublonsLus;
     private ArrayList<Long> nbreMessages;
+    private ArrayList<Long> nbreMessagesLus;
 
     /** initialisation **/
     private void init(){
@@ -76,7 +78,9 @@ public class ContactsRecyclerView extends AppCompatActivity {
         modelRecord = new ModelRecord();
 
         listeSansDoublons = new ArrayList<String>();
+        listeSansDoublonsLus = new ArrayList<String>();
         nbreMessages = new ArrayList<Long>();
+        nbreMessagesLus = new ArrayList<Long>();
 
         Log.i(TAG, "init: userId = " + userID);
     }
@@ -142,18 +146,23 @@ public class ContactsRecyclerView extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 ArrayList<String> listeContacts=new ArrayList<>();
+                ArrayList<String> listeContactsLus=new ArrayList<>();
                 if (task.isSuccessful()){
                     for (DocumentSnapshot documentSnapshot : task.getResult()){
                         Log.i(TAG, "onComplete: " + documentSnapshot.getString(KEY_CALLERSNUM));
                         listeContacts.add(documentSnapshot.getString(KEY_CALLERSNUM));
                         // La meme chose mais avec le flag lu
+                        if(Boolean.TRUE.equals(documentSnapshot.getBoolean(KEY_FLAG))) listeContactsLus.add(documentSnapshot.getString(KEY_CALLERSNUM));
                     }
                     Log.i(TAG, "onComplete: " + listeContacts);
+                    Log.i(TAG, "onComplete: " + listeContactsLus);
 
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                         // Création du tableau avec le nb d'appels totals en fonction du numéro de KEY_CALLERSNUM
                         Map<String, Long> counts = listeContacts.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
                         Log.i(TAG, "compteOccurrences: " + counts);
+                        Map<String, Long> countsLus = listeContactsLus.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+                        Log.i(TAG, "compteOccurrencesLus: " + countsLus);
                         // Récupération du nombre d'appels
                         for(Long value : counts.values()){
                             Log.i(TAG, "Nb appels => " + value);
@@ -164,8 +173,17 @@ public class ContactsRecyclerView extends AppCompatActivity {
                             Log.i(TAG, "Nb appels => " + key);
                             listeSansDoublons.add(key);
                         }
+                        for(Long value : countsLus.values()){
+                            Log.i(TAG, "Nb appels => " + value);
+                            nbreMessagesLus.add(value);
+                        }
+                        // Récupération d'une seule valeur de KEY_CALLERSNUM
+                        for(String key: countsLus.keySet()){
+                            Log.i(TAG, "Nb appels => " + key);
+                            listeSansDoublonsLus.add(key);
+                        }
                     }
-                    ContactsAdapter myContactsAdapter = new ContactsAdapter(ContactsRecyclerView.this, listeSansDoublons, nbreMessages);
+                    ContactsAdapter myContactsAdapter = new ContactsAdapter(ContactsRecyclerView.this, listeSansDoublons, nbreMessages, listeSansDoublonsLus, nbreMessagesLus);
                     rvContacts.setAdapter(myContactsAdapter);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(ContactsRecyclerView.this,
                             LinearLayoutManager.VERTICAL, false);

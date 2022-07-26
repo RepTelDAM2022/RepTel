@@ -1,14 +1,17 @@
 package com.dam.reptel;
 
+import static com.dam.reptel.commons.NodesNames.KEY_CALLERSNAME;
+import static com.dam.reptel.commons.NodesNames.KEY_CALLERSNAMELOWERCASE;
+import static com.dam.reptel.commons.NodesNames.KEY_CALLERSNUM;
+import static com.dam.reptel.commons.NodesNames.KEY_FIRSTMESSAGE;
 import static com.dam.reptel.commons.NodesNames.KEY_FLAG;
+import static com.dam.reptel.commons.NodesNames.KEY_MESSAGE;
+import static com.dam.reptel.commons.NodesNames.KEY_MESSAGE_LOCAL;
+import static com.dam.reptel.commons.NodesNames.KEY_MYNUM;
+import static com.dam.reptel.commons.NodesNames.KEY_TIMESTAMP;
 
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +19,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,14 +35,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.dam.reptel.commons.NodesNames.*;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, AdapterRecords.RecordsViewHolder> {
 
@@ -51,7 +50,8 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
     private String userId;
-    private String documentReference;
+    private DocumentReference documentReference;
+    private CollectionReference colRef;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -103,17 +103,32 @@ public class AdapterRecords extends FirestoreRecyclerAdapter<ModelRecord, Adapte
 
 // TODO: 10/07/2022 ici programmer la mise du flag a true (tester s'il est a false) quand on lit le message.
                 /** initialisation de la bdd **/
-                Log.i(TAG, "AdapterRecords.RecordsViewHolder: initialisation de la bdd");
                 firebaseAuth = FirebaseAuth.getInstance();
                 userId = firebaseAuth.getCurrentUser().getUid();
                 db = FirebaseFirestore.getInstance();
-//                documentReference = db.collection(userId).document().getId();
-                Log.i(TAG, "****** userID = " + userId + "\n db = " + db + "\n docRef = " + documentReference);
-
+                colRef= db.collection(userId);
+                documentReference = colRef.document("M"+timestamp);
+                Log.i(TAG, "****** \n userID = " + userId + "\n colRef = " + colRef + "\n docRef = " + documentReference);
 
                 /**
                 * methode pour mettre le flag a true une fois le message lu
                 */
+                Map<String, Object> datas = new HashMap<>();
+                datas.put(KEY_FLAG, true);
+
+                documentReference.update(datas)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.i(TAG, "onSuccess: document added with ID = " + documentReference.getId());
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i(TAG, "onFailure: error adding document to db " + e);
+                            }
+                        });
 
             }
         });

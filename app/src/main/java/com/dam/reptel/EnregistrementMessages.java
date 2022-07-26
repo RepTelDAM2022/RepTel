@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dam.reptel.commons.Util;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,6 +49,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.dam.reptel.commons.NodesNames.*;
+import static com.dam.reptel.commons.Util.*;
 
 /**
  * Enregistrement des messages en local pour contourner l'interdiction d'Android d'enregistrer une communication telephonique
@@ -147,7 +149,7 @@ public class EnregistrementMessages extends AppCompatActivity {
 //                    uploadAudiotoDB();
                 } else {
                     if (!numAppelant.getText().toString().equals("")) {
-                        nomAppelant = getContactNameByPhoneNumber(EnregistrementMessages.this, numAppelant.getText().toString());
+                        nomAppelant = Util.getContactNameByPhoneNumber(EnregistrementMessages.this, numAppelant.getText().toString());
                         tv_Contact.setText(nomAppelant);
                         startRecording();
                         btnREC.setText("STOP");
@@ -236,7 +238,9 @@ public class EnregistrementMessages extends AppCompatActivity {
         num_Appelant = numAppelant.getText().toString();
 
         CollectionReference productsRef = FirebaseFirestore.getInstance().collection(userId);
+        DocumentReference documentReference = productsRef.document("M"+time);
 
+//        Log.i(TAG, "enregistrerDansLaBDD: userID = " + userId + " docref = " + "M" + time);
         // on prepare les donnees pour les envoyer dans la bdd
         Map<String, Object> datas = new HashMap<>();
         datas.put(KEY_MYNUM, myPhoneNumber);
@@ -253,11 +257,11 @@ public class EnregistrementMessages extends AppCompatActivity {
             datas.put(KEY_CALLERSNAMELOWERCASE, null);
         }
 
-        productsRef.add(datas)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        productsRef.document("M"+time).set(datas)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.i(TAG, "onSuccess: DocumentSnapshot added with ID = " + documentReference.getId());
+                    public void onSuccess(Void unused) {
+                        Log.i(TAG, "onSuccess: document added with ID = " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -273,8 +277,6 @@ public class EnregistrementMessages extends AppCompatActivity {
      */
     private void startRecording() {
 
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE);
-//        time = dateFormat.format(new Date());
         time = System.currentTimeMillis();
 
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -329,29 +331,4 @@ public class EnregistrementMessages extends AppCompatActivity {
                 break;
         }
     }
-
-    /**
-     * sortie du nom de la base contacts dans le telephone a partir du numero
-     * @param context
-     * @param phoneNumber
-     * @return
-     */
-    public static String getContactNameByPhoneNumber(Context context, String phoneNumber) {
-        ContentResolver cr = context.getContentResolver();
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-        Cursor cursor = cr.query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
-        String contactName = null;
-        if (cursor.moveToFirst()) {
-            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-        }
-
-        if (!cursor.isClosed()) {
-            cursor.close();
-        }
-        return contactName;
-    }
-
 }

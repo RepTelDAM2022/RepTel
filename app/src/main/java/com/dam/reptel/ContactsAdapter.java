@@ -36,6 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder> {
 
@@ -48,12 +49,18 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     private ArrayList<Long> nbreMessages;
     private String numTel;
     private long nbrMes;
+    private ArrayList<String> listeSansDoublonsLus;
+    private ArrayList<Long> nbreMessagesLus;
+    private String numTelLus;
+    private long nbrMesLus;
 
 
-    public ContactsAdapter(Context context, ArrayList<String> listeSansDoublons, ArrayList<Long> nbreMessages) {
+    public ContactsAdapter(Context context, ArrayList<String> listeSansDoublons, ArrayList<Long> nbreMessages, ArrayList<String> listeSansDoublonsLus, ArrayList<Long> nbreMessagesLus) {
         this.context = context;
         this.listeSansDoublons = listeSansDoublons;
         this.nbreMessages = nbreMessages;
+        this.listeSansDoublonsLus = listeSansDoublonsLus;
+        this.nbreMessagesLus = nbreMessagesLus;
     }
 
     @NonNull
@@ -70,12 +77,23 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         position = contactsViewHolder.getBindingAdapterPosition();
         numTel = listeSansDoublons.get(position);
         nbrMes = nbreMessages.get(position);
+        int n=0; nbrMesLus=0;
+        for (n=0; n<listeSansDoublonsLus.size(); n++){
+            if (Objects.equals(numTel, listeSansDoublonsLus.get(n))){
+                nbrMesLus=nbreMessagesLus.get(n);
+                break;
+            }
+        }
+
         String nom = Util.getContactNameByPhoneNumber(contactsViewHolder.tv_nomcontact.getContext(), numTel);
         Bitmap photo = Util.getDisplayPhoto(contactsViewHolder.tv_nomcontact.getContext(), numTel);
 
         contactsViewHolder.tv_nomcontact.setText(nom);
         contactsViewHolder.tv_telcontact.setText(numTel);
-        contactsViewHolder.btn_flag.setText(String.valueOf(nbrMes));
+        contactsViewHolder.btn_flag.setText(String.valueOf(nbrMes-nbrMesLus));
+        if (nbrMes-nbrMesLus==0){
+            contactsViewHolder.btn_flag.setVisibility(View.INVISIBLE);
+        }
 
         /** ajout des options pour afficher les photos des contacts.**/
 
